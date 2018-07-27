@@ -17,10 +17,10 @@ public class NetworkUtilities {
 
     final static String PARAM_LANG = "language";
     final static String lang = "en-US";
+    final static String api_key = "267b5b0e4de9ead6b9925df334cc7eba" ;
 
 
     public static URL buildUrl() {
-        String api_key = "@string/api_key" ;
 
         Uri builtUri = Uri.parse(POPMOV_BASE_URL).buildUpon()
                 .appendQueryParameter(PARAM_API_KEY, api_key)

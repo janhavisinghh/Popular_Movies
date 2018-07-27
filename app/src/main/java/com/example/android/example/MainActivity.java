@@ -2,6 +2,7 @@ package com.example.android.example;
 
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,10 +11,14 @@ import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.example.android.example.utilities.NetworkUtilities;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         prepareAlbums();
+
+        moviesDBQuery();
 
     }
 
@@ -141,5 +148,33 @@ public class MainActivity extends AppCompatActivity {
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
+    private void moviesDBQuery()  {
+        URL MoviesQuery = NetworkUtilities.buildUrl();
+        new moviesDBQueryTask().execute(MoviesQuery);
+
+    }
+    public class moviesDBQueryTask extends AsyncTask<URL, Void, String> {
+
+        // COMPLETED (2) Override the doInBackground method to perform the query. Return the results. (Hint: You've already written the code to perform the query)
+        @Override
+        protected String doInBackground(URL... params) {
+            URL searchUrl = params[0];
+            String MoviesQueryResult = null;
+            try {
+                MoviesQueryResult = NetworkUtilities.getResponseFromHttpUrl(searchUrl);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return MoviesQueryResult;
+        }
+
+        // COMPLETED (3) Override onPostExecute to display the results in the TextView
+        @Override
+        protected void onPostExecute(String MovieQueryResult) {
+            if (MovieQueryResult != null && !MovieQueryResult.equals("")) {
+                Toast.makeText(getApplicationContext(), MovieQueryResult, Toast.LENGTH_SHORT);
+            }
+        }
     }
 }
