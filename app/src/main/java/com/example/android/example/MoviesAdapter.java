@@ -11,49 +11,108 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHolder> {
+public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
+    public static final String BASE_PATH = "http://image.tmdb.org/t/p/w342";
+    public List<Movie> movies;
+    public ImageView thumbnail;
+    private OnItemClickListener mListener;
 
-        private Context mContext;
-        private List<Movie> albumList;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public ImageView thumbnail;
-
-            public MyViewHolder(View view) {
-                super(view);
-                thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+    public interface OnItemClickListener{
+        void onItemClick(int position);
             }
+    public void setOnItemClickListener(OnItemClickListener listener){
+        mListener = listener;
+    }
+
+//    private GridItemListener listener;
+
+
+//    public MoviesAdapter(GridItemListener listener) {
+//        this.listener = listener;
+//    }
+
+    @Override
+    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.movie_card, parent, false);
+
+        return new MovieViewHolder(view, mListener);
+    }
+
+    @Override
+    public void onBindViewHolder(final MovieViewHolder holder, int position) {
+        holder.bind(position);
+    }
+
+
+    @Override
+    public int getItemCount() {
+        if (movies == null) {
+            return 0;
+        }return movies.size();
+    }
+
+
+    public void setMovies(ArrayList<Movie> movies) {
+        this.movies = movies;
+        notifyDataSetChanged();
+    }
+
+
+//    public interface GridItemListener {
+//        void onClick(Movie movie);
+//    }
+
+
+public class MovieViewHolder extends RecyclerView.ViewHolder  {
+
+    final ImageView imageView;
+
+    public MovieViewHolder(View view, final OnItemClickListener listener) {
+        super(view);
+        imageView = view.findViewById(R.id.thumbnail);
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(listener!=null){
+                    int position=getAdapterPosition();
+                    if(position!=RecyclerView.NO_POSITION)
+                        listener.onItemClick(position);
+                }
+            }
+        });
+//        view.setOnClickListener(this);
+    }
+
+    /**
+     * Set movie title and image
+     *
+     * @param itemIndex position of item
+     */
+    public void bind(int itemIndex) {
+        String posterPath = movies.get(itemIndex).getPoster();
+
+        if (posterPath.equals("null")) {
+            Picasso.get().load(R.drawable.no_image).fit().centerCrop().into(imageView);
+        } else {
+            String posterUrl = BASE_PATH + posterPath;
+            Picasso.get().load(posterUrl).fit().centerCrop().into(imageView);
         }
-
-
-        public MoviesAdapter(Context mContext, List<Movie> albumList) {
-            this.mContext = mContext;
-            this.albumList = albumList;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.movie_card, parent, false);
-
-            return new MyViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final MyViewHolder holder, int position) {
-            Movie movie = albumList.get(position);
-
-            // loading album cover using Glide library
-            Glide.with(mContext).load(movie.getThumbnail()).into(holder.thumbnail);
-        }
-
-
-        @Override
-        public int getItemCount() {
-            return albumList.size();
-        }
-
+    }
+//
+//    @Override
+//    public void onClick(View v) {
+//        int clickedPosition = getAdapterPosition();
+//        listener.onClick(movies.get(clickedPosition));
+//    }
+}
 }
