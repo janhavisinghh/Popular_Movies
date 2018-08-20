@@ -32,7 +32,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MoviesAdapter.OnItemClickListener {
+public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
     private static final int SPAN_COUNT = 3;
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.OnI
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
+
         moviesList = new ArrayList<>();
         progressBar = (ProgressBar) findViewById(R.id.pb_loading_indicator);
         errorMessageTV = (TextView) findViewById(R.id.tv_error_message);
@@ -58,9 +59,21 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.OnI
         GridLayoutManager mLayoutManager = new GridLayoutManager(this, SPAN_COUNT);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setHasFixedSize(true);
-        adapter = new MoviesAdapter();
+//        recyclerView.setAdapter(adapter);
+        adapter = new MoviesAdapter(new MoviesAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Movie position) {
+                String movie_title = position.getTitle();
+                Toast.makeText(MainActivity.this, movie_title +" Clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
         recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(MainActivity.this);
+//        adapter.setOnItemClickListener(MainActivity.this);
+//        recyclerView.setAdapter(new MoviesAdapter(moviesList, new MoviesAdapter().OnItemClickListener() {
+//            @Override public void onItemClick(Movie item) {
+//                Toast.makeText(getContext(), "Item Clicked", Toast.LENGTH_LONG).show();
+//            }
+//        }));
 
         if (sortByPath == null) {
             parseUrl = NetworkUtilities.getDefaultSortByPathUrl();
@@ -105,11 +118,11 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.OnI
         progressBar.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onItemClick(int position) {
-        Toast.makeText(MainActivity.this,"Item Clicked", Toast.LENGTH_SHORT);
-
-    }
+//    @Override
+//    public void onItemClick(int position) {
+//        Toast.makeText(MainActivity.this,"Item Clicked", Toast.LENGTH_SHORT);
+//
+//    }
 
 
     public class moviesDBQueryTask extends AsyncTask<URL, Void, ArrayList<Movie>> {
