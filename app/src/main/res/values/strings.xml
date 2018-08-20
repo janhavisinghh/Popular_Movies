@@ -2,5 +2,6 @@
     <string name="app_name">Popular Movies</string>
     <string name="api_key">267b5b0e4de9ead6b9925df334cc7eba</string>
     <string name="error_message">OOPS! Something went wrong.</string>
+    <string name="user_rating_value">%1$s / 10</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
 </resources>

@@ -1,17 +1,20 @@
 package com.example.android.example;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
+import android.widget.AdapterView.OnItemClickListener;
 
 import org.w3c.dom.Text;
 
@@ -22,14 +25,32 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     public static final String BASE_PATH = "http://image.tmdb.org/t/p/w342";
     public List<Movie> movies;
     public ImageView thumbnail;
+    private Context context;
     private OnItemClickListener mListener;
 
+    private final OnItemClickListener listener;
+
+
+
     public interface OnItemClickListener{
-        void onItemClick(int position);
+        void onItemClick(Movie position);
             }
-    public void setOnItemClickListener(OnItemClickListener listener){
-        mListener = listener;
+
+    public MoviesAdapter(OnItemClickListener listener) {
+        this.listener = listener;
     }
+    @Override
+    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.movie_card, parent, false);
+
+        return new MovieViewHolder(view);
+    }
+//    public void setOnItemClickListener(OnItemClickListener listener){
+//        mListener = listener;
+//    }
+
 
 //    private GridItemListener listener;
 
@@ -38,18 +59,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 //        this.listener = listener;
 //    }
 
-    @Override
-    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.movie_card, parent, false);
 
-        return new MovieViewHolder(view, mListener);
-    }
 
     @Override
     public void onBindViewHolder(final MovieViewHolder holder, int position) {
-        holder.bind(position);
+        holder.bind(position,movies.get(position), listener);
     }
 
 
@@ -67,52 +81,37 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     }
 
 
-//    public interface GridItemListener {
-//        void onClick(Movie movie);
-//    }
-
-
 public class MovieViewHolder extends RecyclerView.ViewHolder  {
 
     final ImageView imageView;
 
-    public MovieViewHolder(View view, final OnItemClickListener listener) {
-        super(view);
-        imageView = view.findViewById(R.id.thumbnail);
+    public MovieViewHolder(View itemView) {
+        super(itemView);
+        imageView = itemView.findViewById(R.id.thumbnail);
+        }
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(listener!=null){
-                    int position=getAdapterPosition();
-                    if(position!=RecyclerView.NO_POSITION)
-                        listener.onItemClick(position);
-                }
-            }
-        });
-//        view.setOnClickListener(this);
-    }
-
-    /**
-     * Set movie title and image
-     *
-     * @param itemIndex position of item
-     */
-    public void bind(int itemIndex) {
-        String posterPath = movies.get(itemIndex).getPoster();
-
+    public void bind(final int item, final Movie moviesitem, final OnItemClickListener listener) {
+        final String posterPath = movies.get(item).getPoster();
         if (posterPath.equals("null")) {
             Picasso.get().load(R.drawable.no_image).fit().centerCrop().into(imageView);
         } else {
             String posterUrl = BASE_PATH + posterPath;
             Picasso.get().load(posterUrl).fit().centerCrop().into(imageView);
+
         }
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                listener.onItemClick(moviesitem);
+                Intent intent = new Intent(context,DetailsActivity.class);
+                intent.putExtra("title", movies.get(item).getTitle());
+                intent.putExtra("poster_path", movies.get(item).getPoster());
+                intent.putExtra("vote_average", movies.get(item).getUserRating());
+                intent.putExtra("release_date", movies.get(item).getReleaseDate());
+                intent.putExtra("overview", movies.get(item).getOverview());
+                context.startActivity(intent);
+
+            }
+        });
     }
-//
-//    @Override
-//    public void onClick(View v) {
-//        int clickedPosition = getAdapterPosition();
-//        listener.onClick(movies.get(clickedPosition));
-//    }
 }
 }
