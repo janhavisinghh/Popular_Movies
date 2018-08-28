@@ -1,9 +1,14 @@
 package com.example.android.example;
 
+import android.arch.lifecycle.Observer;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,6 +24,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.bumptech.glide.Glide;
 import com.example.android.example.utilities.NetworkUtilities;
@@ -30,6 +37,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
     private URL parseUrl;
     private TextView errorMessageTV;
     private ProgressBar progressBar;
+    private int mPosition = RecyclerView.NO_POSITION;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
 
         moviesList = new ArrayList<>();
         progressBar = (ProgressBar) findViewById(R.id.pb_loading_indicator);
@@ -162,5 +173,74 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // COMPLETED (9) Within onCreateOptionsMenu, use getMenuInflater().inflate to inflate the menu
+        getMenuInflater().inflate(R.menu.menu, menu);
+        // COMPLETED (10) Return true to display your menu
+        return true;
+    }
+
+    // COMPLETED (11) Override onOptionsItemSelected
+    // COMPLETED (12) Within onOptionsItemSelected, get the ID of the item that was selected
+    // COMPLETED (13) If the item's ID is R.id.action_search, show a Toast and return true to tell Android that you've handled this menu click
+    // COMPLETED (14) Don't forgot to call .show() on your Toast
+    // COMPLETED (15) If you do NOT handle the menu click, return super.onOptionsItemSelected to let Android handle the menu click
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        NetworkUtilities n = new NetworkUtilities();
+        int itemThatWasClickedId = item.getItemId();
+        if (itemThatWasClickedId == R.id.highest_rating) {
+            Context context = MainActivity.this;
+            String textToShow = "Highest Rating clicked";
+            sortByPath = "top_rated";
+            loadMovies (sortByPath);
+            Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        else if (itemThatWasClickedId == R.id.most_popular) {
+            Context context = MainActivity.this;
+            String textToShow = "Most Popular clicked";
+            sortByPath = "popular";
+            loadMovies(sortByPath);
+            Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+            new moviesDBQueryTask().execute(parseUrl);
+            adapter.setMovies(moviesList);
+
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    private void loadMovies(final String sortByPath){
+        moviesList.clear();
+        showOnlyLoading();
+        if(sortByPath!=null)
+        parseUrl = NetworkUtilities.getSortByPathUrl(sortByPath);
+        new moviesDBQueryTask().execute(parseUrl);
+
+        adapter.setMovies(moviesList);
+            if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+            recyclerView.scrollToPosition(mPosition);
+            displayUI(moviesList);
+
+    }
+
+    /**
+     * Display data based on availability of movie data
+     *
+     * @param movieLists list of movies
+     */
+    private void displayUI(List<Movie> movieLists) {
+        if (movieLists != null && movieLists.size() != 0) {
+            showMovieData();
+        } else {
+            showErrorMessage();
+        }
+    }
+
+
 
 }

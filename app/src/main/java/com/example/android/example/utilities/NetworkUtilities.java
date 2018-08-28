@@ -21,7 +21,7 @@ import java.util.Scanner;
 
 public class NetworkUtilities {
     final static String POPMOV_BASE_URL =
-            "https://api.themoviedb.org/3/movie/popular";
+            "https://api.themoviedb.org/3/movie";
 
     final static String PARAM_API_KEY = "api_key";
 
@@ -35,11 +35,13 @@ public class NetworkUtilities {
     private static final String KEY_USER_RATING = "vote_average";
     private static final String KEY_RELEASE_DATE = "release_date";
     private static final String KEY_BACKDROP = "backdrop_path";
+    private static final String SORT_BY_PARAM = "popular";
 
 
     public static URL buildUrl() {
 
         Uri builtUri = Uri.parse(POPMOV_BASE_URL).buildUpon()
+                .appendPath(SORT_BY_PARAM)
                 .appendQueryParameter(PARAM_API_KEY, api_key)
                 .appendQueryParameter(PARAM_LANG, lang)
                 .build();
@@ -53,6 +55,24 @@ public class NetworkUtilities {
 
         return url;
     }
+    public static URL buildUrl(String SORT_BY_PARAM) {
+
+        Uri builtUri = Uri.parse(POPMOV_BASE_URL).buildUpon()
+                .appendPath(SORT_BY_PARAM)
+                .appendQueryParameter(PARAM_API_KEY, api_key)
+                .appendQueryParameter(PARAM_LANG, lang)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
 
 
     public static String getResponseFromHttpUrl(URL url) throws IOException {
@@ -95,6 +115,10 @@ public class NetworkUtilities {
     public static URL getDefaultSortByPathUrl() {
         return buildUrl();
     }
+    public static URL getSortByPathUrl(String SORT_BY_PARAM) {
+        return buildUrl(SORT_BY_PARAM);
+    }
+
     public static boolean isOnline() {
         try {
             int timeoutMs = 1500;

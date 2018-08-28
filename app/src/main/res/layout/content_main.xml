@@ -9,7 +9,6 @@
     tools:showIn="@layout/activity_main"
     >
 
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
@@ -31,7 +30,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:drawableTop="@drawable/load"
         android:text="@string/error_message"
         android:textColor="@android:color/white"
         android:textSize="16sp"
