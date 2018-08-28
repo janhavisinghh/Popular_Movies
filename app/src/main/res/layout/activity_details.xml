@@ -1,101 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ScrollView01"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/colorPrimary"
+    android:scrollbars="none" >
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetailsActivity">
+
     <ImageView
-        android:layout_width="187.5dp"
-        android:layout_height="275dp"
+        android:layout_width="351.5625dp"
+        android:layout_height="515.625dp"
         android:id="@+id/poster_iv_detail"
+        android:layout_marginTop="15dp"
         android:layout_centerHorizontal="true"/>
     <TextView
+        android:id="@+id/tvText"
         android:layout_width="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
-        android:text="Title"
-        android:textStyle="bold"
-        android:layout_marginTop="10dp"
-        android:textAlignment="center"
+        android:layout_centerInParent="true"
         android:layout_below="@+id/poster_iv_detail"
-        android:textColor="@color/colorAccent"
-        android:textSize="15sp"
-        android:id="@+id/tv"/>
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:text="info"
+        android:textColor="@color/colorLight"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_below="@+id/poster_iv_detail"
+        android:layout_marginTop="30dp"
+        android:layout_toLeftOf="@id/tvText"
+        android:background="@color/colorLight"
+        android:id="@+id/vv"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="16dp"
+        android:layout_below="@+id/poster_iv_detail"
+        android:layout_toRightOf="@id/tvText"
+        android:layout_marginTop="30dp"
+        android:background="@color/colorLight"
+        />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textSize="15sp"
-        android:layout_below="@+id/tv"
-        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginLeft="16dp"
+        android:layout_below="@+id/vv"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:textSize="30sp"
+        android:textColor="@color/colorAccent"
         android:textStyle="bold"
         android:id="@+id/title_tv_detail"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/title_tv_detail"
         android:textStyle="bold"
+        android:layout_marginLeft="16dp"
+        android:textSize="15sp"
+        android:textAlignment="center"
         android:textColor="@color/colorAccent"
-        android:layout_centerHorizontal="true"
-        android:textSize="15sp"
-        android:id="@+id/tv1"
-        android:text="Synopsis"
-        android:layout_below="@+id/title_tv_detail"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/synopsis_tv_detail"
-        android:layout_below="@+id/tv1"
-        android:textColor="@color/colorPrimary"
+        android:id="@+id/release_tv_detail"
         />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:id="@+id/tv2"
-        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="16dp"
         android:textStyle="bold"
-        android:layout_below="@+id/synopsis_tv_detail"
+        android:layout_below="@+id/release_tv_detail"
         android:textColor="@color/colorAccent"
-        android:text="Rating"/>
+        android:text="Rating:"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        android:layout_centerHorizontal="true"
-
-        android:layout_below="@+id/tv2"
-        android:textColor="@color/colorPrimary"
+        android:textStyle="normal"
+        android:layout_toRightOf="@+id/tv2"
+        android:layout_marginLeft="16dp"
+        android:layout_below="@+id/release_tv_detail"
+        android:textColor="@color/colorAccent"
         android:id="@+id/rating_tv_detail"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"
-        android:id="@+id/tv3"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/rating_tv_detail"
-        android:textAlignment="center"
-        android:text="Release Date"
+        android:textStyle="normal"
+        android:layout_marginLeft="16dp"
+        android:id="@+id/synopsis_tv_detail"
+        android:layout_below="@+id/tv2"
         android:textColor="@color/colorAccent"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv3"
-        android:textStyle="bold"
-        android:textSize="15sp"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
-        android:id="@+id/release_tv_detail"
+        android:layout_marginBottom="100dp"
         />
 
 
-</RelativeLayout>
+
+
+
+
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

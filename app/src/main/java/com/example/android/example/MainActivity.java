@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(Movie position) {
                 String movie_title = position.getTitle();
-                Toast.makeText(MainActivity.this, movie_title +" Clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, movie_title , Toast.LENGTH_SHORT).show();
             }
         });
         recyclerView.setAdapter(adapter);
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         int itemThatWasClickedId = item.getItemId();
         if (itemThatWasClickedId == R.id.highest_rating) {
             Context context = MainActivity.this;
-            String textToShow = "Highest Rating clicked";
+            String textToShow = "Highest Rating Movies";
             sortByPath = "top_rated";
             loadMovies (sortByPath);
             Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else if (itemThatWasClickedId == R.id.most_popular) {
             Context context = MainActivity.this;
-            String textToShow = "Most Popular clicked";
+            String textToShow = "Most Popular Movies";
             sortByPath = "popular";
             loadMovies(sortByPath);
             Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
