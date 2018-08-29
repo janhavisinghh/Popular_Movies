@@ -4,5 +4,8 @@
     <string name="error_message">OOPS! Something went wrong.</string>
     <string name="user_rating_value">%1$s / 10</string>
     <string name="info">info</string>
+    <string name="MostPopular">Most Popular</string>
+    <string name="HighestRated">Highest Rated</string>
+
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
 </resources>

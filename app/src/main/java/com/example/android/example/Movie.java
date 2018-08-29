@@ -52,10 +52,6 @@ public class Movie implements Parcelable{
         return overview;
     }
 
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -68,33 +64,18 @@ public class Movie implements Parcelable{
         return poster;
     }
 
-    public void setPoster(String poster) {
-        this.poster = poster;
-    }
 
     public String getUserRating() {
         return userRating;
     }
 
-    public void setUserRating(String userRating) {
-        this.userRating = userRating;
-    }
 
     public String getReleaseDate() {
         return convertDateString(releaseDate);
     }
 
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
 
-    public String getBackdrop() {
-        return backdrop;
-    }
 
-    public void setBackdrop(String backdrop) {
-        this.backdrop = backdrop;
-    }
 
     @Override
     public int describeContents() {
@@ -108,15 +89,8 @@ public class Movie implements Parcelable{
         dest.writeString(overview);
         dest.writeString(userRating);
         dest.writeString(releaseDate);
-        dest.writeString(backdrop);
     }
 
-    /**
-     * Change the date format
-     *
-     * @param dateString date in String type
-     * @return Converted date string
-     */
     private String convertDateString(String dateString) {
         Date date = null;
         try {

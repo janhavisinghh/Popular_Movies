@@ -4,19 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
-import android.widget.AdapterView.OnItemClickListener;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +17,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     public List<Movie> movies;
     public ImageView thumbnail;
     private Context context;
-    private OnItemClickListener mListener;
 
     private final OnItemClickListener listener;
 
@@ -47,18 +37,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
         return new MovieViewHolder(view);
     }
-//    public void setOnItemClickListener(OnItemClickListener listener){
-//        mListener = listener;
-//    }
-
-
-//    private GridItemListener listener;
-
-
-//    public MoviesAdapter(GridItemListener listener) {
-//        this.listener = listener;
-//    }
-
 
 
     @Override
