@@ -27,16 +27,16 @@ public class Movie implements Parcelable{
     private String overview;
     private String userRating;
     private String releaseDate;
-    private String backdrop;
+    private String movieID;
 
     public Movie(String title, String poster, String overview, String userRating,
-                 String releaseDate, String backdrop) {
+                 String releaseDate, String movieID) {
         this.title = title;
         this.poster = poster;
         this.overview = overview;
         this.userRating = userRating;
         this.releaseDate = releaseDate;
-        this.backdrop = backdrop;
+        this.movieID = movieID;
     }
 
     public Movie(Parcel source) {
@@ -45,34 +45,45 @@ public class Movie implements Parcelable{
         this.overview = source.readString();
         this.userRating = source.readString();
         this.releaseDate = source.readString();
-        this.backdrop = source.readString();
+        this.movieID = source.readString();
     }
 
     public String getOverview() {
+
         return overview;
     }
 
     public String getTitle() {
+
         return title;
     }
 
     public void setTitle(String title) {
+
         this.title = title;
     }
 
     public String getPoster() {
+
         return poster;
     }
 
 
     public String getUserRating() {
+
         return userRating;
     }
 
 
     public String getReleaseDate() {
+
         return convertDateString(releaseDate);
     }
+
+    public String getmovieID() {
+        return movieID;
+    }
+
 
 
 
@@ -89,6 +100,7 @@ public class Movie implements Parcelable{
         dest.writeString(overview);
         dest.writeString(userRating);
         dest.writeString(releaseDate);
+        dest.writeString(movieID);
     }
 
     private String convertDateString(String dateString) {

@@ -2,8 +2,11 @@ package com.example.android.example;
 
 import android.content.Context;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 
 import android.view.View;
 
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,14 +39,15 @@ public class MainActivity extends AppCompatActivity {
     private TextView errorMessageTV;
     private ProgressBar progressBar;
     private int mPosition = RecyclerView.NO_POSITION;
-
-
+    private static SQLiteDatabase mDb;
+    private FavMoviesAdapter favMoviesAdapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -57,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(Movie position) {
                 String movie_title = position.getTitle();
-                Toast.makeText(MainActivity.this, movie_title , Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, movie_title, Toast.LENGTH_SHORT).show();
             }
         });
         recyclerView.setAdapter(adapter);
@@ -74,13 +79,17 @@ public class MainActivity extends AppCompatActivity {
             adapter.setMovies(moviesList);
         }
 
+
+
+
+
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList(KEY_PARCEL_MOVIE_LIST, moviesList);
         super.onSaveInstanceState(outState);
     }
-
 
 
     private void showMovieData() {
@@ -101,8 +110,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     public class moviesDBQueryTask extends AsyncTask<URL, Void, ArrayList<Movie>> {
 
         @Override
@@ -110,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
             super.onPreExecute();
             showOnlyLoading();
         }
+
         @Override
         protected ArrayList<Movie> doInBackground(URL... params) {
             if (params.length == 0) {
@@ -139,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -154,36 +163,49 @@ public class MainActivity extends AppCompatActivity {
             Context context = MainActivity.this;
             String textToShow = "Highest Rating Movies";
             sortByPath = "top_rated";
-            loadMovies (sortByPath);
+            recyclerView.setAdapter(adapter);
+            loadMovies(sortByPath);
             Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
             return true;
-        }
-        else if (itemThatWasClickedId == R.id.most_popular) {
+        } else if (itemThatWasClickedId == R.id.most_popular) {
             Context context = MainActivity.this;
             String textToShow = "Most Popular Movies";
             sortByPath = "popular";
             loadMovies(sortByPath);
+            recyclerView.setAdapter(adapter);
             Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
             return true;
         }
-            new moviesDBQueryTask().execute(parseUrl);
-            adapter.setMovies(moviesList);
+        else if (itemThatWasClickedId == R.id.favourite) {
+            Context context = MainActivity.this;
+            String textToShow = "Most Popular Movies";
+            FavListDBHelper dbHelper = new FavListDBHelper(this);
+            mDb = dbHelper.getWritableDatabase();
+//            TestUtil.insertFakeData(mDb);
+            Cursor cursor = getAllGuests();
+            favMoviesAdapter = new FavMoviesAdapter(this, cursor);
+            recyclerView.setAdapter(favMoviesAdapter);
+            Toast.makeText(context, "Favourite movies", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        new moviesDBQueryTask().execute(parseUrl);
+        adapter.setMovies(moviesList);
 
         return super.onOptionsItemSelected(item);
 
     }
 
-    private void loadMovies(final String sortByPath){
+    private void loadMovies(final String sortByPath) {
         moviesList.clear();
         showOnlyLoading();
-        if(sortByPath!=null)
-        parseUrl = NetworkUtilities.getSortByPathUrl(sortByPath);
+        if (sortByPath != null)
+            parseUrl = NetworkUtilities.getSortByPathUrl(sortByPath);
         new moviesDBQueryTask().execute(parseUrl);
 
         adapter.setMovies(moviesList);
-            if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
-            recyclerView.scrollToPosition(mPosition);
-            displayUI(moviesList);
+        if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+        recyclerView.scrollToPosition(mPosition);
+        displayUI(moviesList);
 
     }
 
@@ -195,6 +217,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public Cursor getAllGuests() {
+        return mDb.query(MoviesContract.MoviesEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                MoviesContract.MoviesEntry._ID);
+    }
 
 
 }
+

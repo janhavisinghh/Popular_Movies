@@ -3,6 +3,7 @@ package com.example.android.example.utilities;
 import android.net.Uri;
 
 import com.example.android.example.Movie;
+import com.example.android.example.Review;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +23,9 @@ import java.util.Scanner;
 public class NetworkUtilities {
     final static String POPMOV_BASE_URL =
             "https://api.themoviedb.org/3/movie";
+    private static final String Youtube_BaseURL =
+            "https://www.youtube.com/watch";
+
 
     final static String PARAM_API_KEY = "api_key";
 
@@ -30,12 +34,22 @@ public class NetworkUtilities {
     final static String api_key = "267b5b0e4de9ead6b9925df334cc7eba" ;
     private static final String KEY_RESULTS = "results";
     private static final String KEY_TITLE = "title";
+    private static final String KEY_AUTHOR = "author";
+    private static final String KEY_CONTENT = "content";
+    private static final String KEY_ID = "key";
     private static final String KEY_POSTER_PATH = "poster_path";
     private static final String KEY_OVERVIEW = "overview";
     private static final String KEY_USER_RATING = "vote_average";
     private static final String KEY_RELEASE_DATE = "release_date";
-    private static final String KEY_BACKDROP = "backdrop_path";
+    private static final String KEY_MOVIEID = "id";
     private static final String SORT_BY_PARAM = "popular";
+    private static final String MOVIE_ID = "439079";
+    private static final String video = "videos";
+    private static final String review = "reviews";
+    private static final String YT_PARAM = "v";
+    private static final String Youtube_id = "pzD9zGcUNrw";
+
+
 
 
     public static URL buildUrl() {
@@ -55,6 +69,43 @@ public class NetworkUtilities {
 
         return url;
     }
+    public static URL buildTrailerUrl(String MOVIE_ID) {
+
+        Uri builtUri = Uri.parse(POPMOV_BASE_URL).buildUpon()
+                .appendPath(MOVIE_ID)
+                .appendPath(video)
+                .appendQueryParameter(PARAM_API_KEY, api_key)
+                .appendQueryParameter(PARAM_LANG, lang)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+    public static URL buildReviewURL(String MOVIE_ID) {
+
+        Uri builtUri = Uri.parse(POPMOV_BASE_URL).buildUpon()
+                .appendPath(MOVIE_ID)
+                .appendPath(review)
+                .appendQueryParameter(PARAM_API_KEY, api_key)
+                .appendQueryParameter(PARAM_LANG, lang)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
     public static URL buildUrl(String SORT_BY_PARAM) {
 
         Uri builtUri = Uri.parse(POPMOV_BASE_URL).buildUpon()
@@ -107,10 +158,37 @@ public class NetworkUtilities {
             String overview = result.getString(KEY_OVERVIEW);
             String userRating = result.getString(KEY_USER_RATING);
             String releaseDate = result.getString(KEY_RELEASE_DATE);
-            String backdrop = result.getString(KEY_BACKDROP);
-            movies.add(new Movie(title, poster, overview, userRating, releaseDate, backdrop));
+            String movieID = result.getString(KEY_MOVIEID);
+            movies.add(new Movie(title, poster, overview, userRating, releaseDate, movieID));
         }
         return movies;
+    }
+    public static String parseTrailerJSON(String json) throws JSONException {
+
+        JSONObject root = new JSONObject(json);
+        JSONArray results = root.getJSONArray(KEY_RESULTS);
+
+            JSONObject result = results.getJSONObject(0);
+            String youtube_id = result.getString(KEY_ID);
+            if(youtube_id !=null)
+        return youtube_id;
+            else
+                return null;
+    }
+    public static ArrayList<Review> parseReviewJson(String json) throws JSONException {
+
+        JSONObject root = new JSONObject(json);
+        JSONArray results = root.getJSONArray(KEY_RESULTS);
+
+        ArrayList<Review> reviews = new ArrayList<>();
+
+        for (int i = 0; i < results.length(); i++) {
+            JSONObject result = results.getJSONObject(i);
+            String author = result.getString(KEY_AUTHOR);
+            String content = result.getString(KEY_CONTENT);
+            reviews.add(new Review(author, content));
+        }
+        return reviews;
     }
     public static URL getDefaultSortByPathUrl() {
         return buildUrl();
