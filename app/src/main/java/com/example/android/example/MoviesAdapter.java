@@ -74,7 +74,6 @@ public class MovieViewHolder extends RecyclerView.ViewHolder  {
         } else {
             String posterUrl = BASE_PATH + posterPath;
             Picasso.get().load(posterUrl).fit().centerCrop().into(imageView);
-
         }
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -92,5 +91,5 @@ public class MovieViewHolder extends RecyclerView.ViewHolder  {
             }
         });
     }
-}
+  }
 }

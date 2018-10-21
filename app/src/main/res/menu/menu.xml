@@ -14,6 +14,12 @@
         android:id="@+id/favourite"
         android:title="@string/favourite"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/clear_button"
+        android:title="Clear Button"
+        app:showAsAction="always"
+        android:visible="false"
+        android:icon="@drawable/clear_button"/>
 
     <item
         android:id="@+id/refresh_button"

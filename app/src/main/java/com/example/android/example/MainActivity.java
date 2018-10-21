@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 
 import android.view.View;
 
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private int mPosition = RecyclerView.NO_POSITION;
     private static SQLiteDatabase mDb;
     private FavMoviesAdapter favMoviesAdapter;
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int TASK_LOADER_ID = 0;
 
 
     @Override
@@ -78,9 +78,6 @@ public class MainActivity extends AppCompatActivity {
             moviesList = savedInstanceState.getParcelableArrayList(KEY_PARCEL_MOVIE_LIST);
             adapter.setMovies(moviesList);
         }
-
-
-
 
 
     }
@@ -175,8 +172,7 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setAdapter(adapter);
             Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
             return true;
-        }
-        else if (itemThatWasClickedId == R.id.favourite) {
+        } else if (itemThatWasClickedId == R.id.favourite) {
             Context context = MainActivity.this;
             String textToShow = "Most Popular Movies";
             FavListDBHelper dbHelper = new FavListDBHelper(this);
@@ -185,7 +181,6 @@ public class MainActivity extends AppCompatActivity {
             Cursor cursor = getAllGuests();
             favMoviesAdapter = new FavMoviesAdapter(this, cursor);
             recyclerView.setAdapter(favMoviesAdapter);
-            Toast.makeText(context, "Favourite movies", Toast.LENGTH_SHORT).show();
             return true;
         }
         new moviesDBQueryTask().execute(parseUrl);
@@ -226,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
                 null,
                 MoviesContract.MoviesEntry._ID);
     }
-
-
 }
+
 

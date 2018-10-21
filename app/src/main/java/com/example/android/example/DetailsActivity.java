@@ -1,7 +1,6 @@
 package com.example.android.example;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,7 +8,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -240,7 +238,8 @@ public class DetailsActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Reviews" , Toast.LENGTH_SHORT).show();
                     reviews = MovieQueryResult ;
                     review_button.setOnClickListener(new View.OnClickListener() {
-                        @Override public void onClick(View v) {
+                        @Override
+                        public void onClick(View v) {
                             Intent intent = new Intent(getApplicationContext(),Review.class);
                             intent.putExtra("author", review_obj.getReviewer_name());
                             intent.putExtra("content", review_obj.getReview());

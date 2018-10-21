@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -23,6 +24,7 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
 
 
     public FavMoviesAdapter(Context context, Cursor cursor) {
+//        this.listener = listener;
         this.mContext = context;
         this.mCursor = cursor;
     }
@@ -56,11 +58,27 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
                 .centerCrop()
                 .into(holder.imageView);
 
+//        holder.imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override public void onClick(View v) {
+//                listener.onItemClick(moviesitem);
+//                Intent intent = new Intent(context,DetailsActivity.class);
+//                intent.putExtra("title", movies.get(item).getTitle());
+//                intent.putExtra("poster_path", movies.get(item).getPoster());
+//                intent.putExtra("vote_average", movies.get(item).getUserRating());
+//                intent.putExtra("release_date", movies.get(item).getReleaseDate());
+//                intent.putExtra("overview", movies.get(item).getOverview());
+//                intent.putExtra("id", movies.get(item).getmovieID());
+//
+//                context.startActivity(intent);
+//
+//            }
+//        });
+
+
     }
 
     @Override
     public int getItemCount() {
-        // COMPLETED (4) Update the getItemCount to return the getCount of the cursor
         return mCursor.getCount();
     }
     public void swapCursor(Cursor newCursor) {
@@ -71,12 +89,8 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
         }
     }
 
-    /**
-     * Inner class to hold the views needed to display a single item in the recycler-view
-     */
     class FavViewHolder extends RecyclerView.ViewHolder {
 
-        // Will display the guest name
         final ImageView imageView;
 
         public FavViewHolder(View itemView) {
@@ -84,23 +98,7 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
             imageView = itemView.findViewById(R.id.thumbnail);
         }
 
-//        public void bind(final int item, final Movie moviesitem) {
-//
-//            imageView.setOnClickListener(new View.OnClickListener() {
-//                @Override public void onClick(View v) {
-//                    listener.onItemClick(moviesitem);
-//                    Intent intent = new Intent(context,DetailsActivity.class);
-//                    intent.putExtra("title", movies.get(item).getTitle());
-//                    intent.putExtra("poster_path", movies.get(item).getPoster());
-//                    intent.putExtra("vote_average", movies.get(item).getUserRating());
-//                    intent.putExtra("release_date", movies.get(item).getReleaseDate());
-//                    intent.putExtra("overview", movies.get(item).getOverview());
-//                    intent.putExtra("id", movies.get(item).getmovieID());
-//
-//                    context.startActivity(intent);
-//
-//                }
-//            });
+
 
 
 
