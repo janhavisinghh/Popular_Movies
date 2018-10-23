@@ -22,6 +22,8 @@ import com.squareup.picasso.Picasso;
 import java.net.URL;
 import java.util.ArrayList;
 
+import static com.example.android.example.MoviesContract.MoviesEntry.COLUMN_MOVIE_ID;
+import static com.example.android.example.MoviesContract.MoviesEntry.TABLE_NAME;
 
 
 public class DetailsActivity extends AppCompatActivity {
@@ -45,6 +47,8 @@ public class DetailsActivity extends AppCompatActivity {
     public String movie_id;
     private SQLiteDatabase mDb;
     private FavMoviesAdapter favMoviesAdapter;
+    private int _ID = -1;
+
 
 
     public ArrayList<Review> reviews;
@@ -166,20 +170,48 @@ public class DetailsActivity extends AppCompatActivity {
             cv.put(MoviesContract.MoviesEntry.COLUMN_OVERVIEW, overview);
             cv.put(MoviesContract.MoviesEntry.COLUMN_USER_RATING, userRating);
             cv.put(MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE, releaseDate);
-            cv.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_ID, movieID);
+            cv.put(COLUMN_MOVIE_ID, movieID);
             return mDb.insertWithOnConflict(MoviesContract.MoviesEntry.TABLE_NAME, null, cv,SQLiteDatabase.CONFLICT_REPLACE);
 
     }
 
     public void addToFavMovieList() {
-
+        Toast.makeText(getApplicationContext(),title + " Added!", Toast.LENGTH_SHORT);
         addNewFavMovie(title,poster,synopsis,rating,date,movie_id);
-        Cursor cursor = getAllGuests();
+        Cursor cursor = getAllMovies();
         favMoviesAdapter = new FavMoviesAdapter(this, cursor);
-        favMoviesAdapter.swapCursor(getAllGuests());
+        favMoviesAdapter.swapCursor(getAllMovies());
 
     }
-    public Cursor getAllGuests() {
+    private void removeGuest(String movie_id) {
+        Toast.makeText(getApplicationContext(),title + " Deleted!", Toast.LENGTH_SHORT);
+        FavListDBHelper dbHelper = new FavListDBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.delete(TABLE_NAME, MoviesContract.MoviesEntry.COLUMN_MOVIE_ID + "=?", new String[]{movie_id});
+
+    }
+    public boolean searchMovieInDB(String movie_id) {
+        String[] projection = {
+                MoviesContract.MoviesEntry._ID,
+                MoviesContract.MoviesEntry.COLUMN_TITLE,
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_ID,
+                MoviesContract.MoviesEntry.COLUMN_POSTER_PATH,
+                MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE,
+                MoviesContract.MoviesEntry.COLUMN_USER_RATING,
+                MoviesContract.MoviesEntry.COLUMN_OVERVIEW
+
+        };
+        String selection = COLUMN_MOVIE_ID + " =?";
+        String[] selectionArgs = { movie_id };
+        String limit = "1";
+
+        Cursor cursor = mDb.query(MoviesContract.MoviesEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, null, limit);
+        boolean movie_found = (cursor.getCount() > 0);
+        cursor.close();
+        return movie_found;
+    }
+
+    public Cursor getAllMovies() {
         return mDb.query(MoviesContract.MoviesEntry.TABLE_NAME,
                 null,
                 null,
@@ -197,10 +229,17 @@ public class DetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        int index = -1;
         int itemThatWasClickedId = item.getItemId();
         if (itemThatWasClickedId == R.id.favourite_button) {
-            addToFavMovieList();
+            Boolean movie_present = searchMovieInDB(movie_id);
+            if (movie_present){
+                removeGuest(movie_id);
+
+            }
+            else
+            {    addToFavMovieList();
+            }
             return true;
         }
 

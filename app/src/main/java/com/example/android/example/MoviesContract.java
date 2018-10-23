@@ -10,7 +10,6 @@ public class MoviesContract {
 
     public static final class MoviesEntry implements BaseColumns{
 
-
         public static final String TABLE_NAME = "FavouriteMovies";
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_POSTER_PATH = "poster_path";

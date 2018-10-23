@@ -20,11 +20,12 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
     private Cursor mCursor;
     public List<Movie> movies;
     private Context mContext;
+
     public static final String BASE_PATH = "http://image.tmdb.org/t/p/w342";
 
 
     public FavMoviesAdapter(Context context, Cursor cursor) {
-//        this.listener = listener;
+
         this.mContext = context;
         this.mCursor = cursor;
     }
@@ -39,8 +40,7 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
     }
 
     @Override
-    public void onBindViewHolder(FavViewHolder holder, int position) {
-
+    public void onBindViewHolder(FavViewHolder holder, final int position) {
         if (!mCursor.moveToPosition(position))
             return;
         String TABLE_NAME = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_TITLE));
@@ -50,29 +50,16 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
         String COLUMN_USER_RATING = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_USER_RATING));
         String COLUMN_RELEASE_DATE = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE));
         String COLUMN_MOVIE_ID = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_MOVIE_ID));
-
         String poster = BASE_PATH + COLUMN_POSTER_PATH;
+        Movie movies = new Movie(COLUMN_TITLE,  COLUMN_POSTER_PATH,  COLUMN_OVERVIEW,  COLUMN_USER_RATING,
+                 COLUMN_RELEASE_DATE,  COLUMN_MOVIE_ID);
 
         Glide.with(mContext)
                 .load(poster)
                 .centerCrop()
                 .into(holder.imageView);
 
-//        holder.imageView.setOnClickListener(new View.OnClickListener() {
-//            @Override public void onClick(View v) {
-//                listener.onItemClick(moviesitem);
-//                Intent intent = new Intent(context,DetailsActivity.class);
-//                intent.putExtra("title", movies.get(item).getTitle());
-//                intent.putExtra("poster_path", movies.get(item).getPoster());
-//                intent.putExtra("vote_average", movies.get(item).getUserRating());
-//                intent.putExtra("release_date", movies.get(item).getReleaseDate());
-//                intent.putExtra("overview", movies.get(item).getOverview());
-//                intent.putExtra("id", movies.get(item).getmovieID());
-//
-//                context.startActivity(intent);
-//
-//            }
-//        });
+//        holder.bind(position,movies, listener);
 
 
     }
@@ -97,10 +84,29 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
             super(itemView);
             imageView = itemView.findViewById(R.id.thumbnail);
         }
+//        public void bind(final int item, final Movie moviesitem, final OnItemClickListener listener) {
+//            imageView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    listener.onItemClick(moviesitem);
+//                    Intent intent = new Intent(mContext, DetailsActivity.class);
+//                    intent.putExtra("title", moviesitem.getTitle());
+//                    intent.putExtra("poster_path", moviesitem.getPoster());
+//                    intent.putExtra("vote_average", moviesitem.getUserRating());
+//                    intent.putExtra("release_date", moviesitem.getReleaseDate());
+//                    intent.putExtra("overview", moviesitem.getOverview());
+//                    intent.putExtra("id", moviesitem.getmovieID());
+//
+//                    mContext.startActivity(intent);
+//
+//                }
+//            });
+//        }
 
 
 
 
 
     }
+
 }

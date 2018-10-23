@@ -39,9 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private int mPosition = RecyclerView.NO_POSITION;
     private static SQLiteDatabase mDb;
     private FavMoviesAdapter favMoviesAdapter;
-    private static final String TAG = MainActivity.class.getSimpleName();
-    private static final int TASK_LOADER_ID = 0;
-
+    private MenuItem clear_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MoviesAdapter(new MoviesAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Movie position) {
-                String movie_title = position.getTitle();
-                Toast.makeText(MainActivity.this, movie_title, Toast.LENGTH_SHORT).show();
             }
         });
         recyclerView.setAdapter(adapter);
@@ -148,15 +144,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        clear_button = menu.findItem(R.id.clear_button);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        boolean clear_button_visibility;
         NetworkUtilities n = new NetworkUtilities();
         int itemThatWasClickedId = item.getItemId();
         if (itemThatWasClickedId == R.id.highest_rating) {
+            clear_button_visibility = false;
+            clear_button.setVisible(clear_button_visibility);
             Context context = MainActivity.this;
             String textToShow = "Highest Rating Movies";
             sortByPath = "top_rated";
@@ -165,6 +164,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
             return true;
         } else if (itemThatWasClickedId == R.id.most_popular) {
+            clear_button_visibility = false;
+            clear_button.setVisible(clear_button_visibility);
             Context context = MainActivity.this;
             String textToShow = "Most Popular Movies";
             sortByPath = "popular";
@@ -173,21 +174,31 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
             return true;
         } else if (itemThatWasClickedId == R.id.favourite) {
-            Context context = MainActivity.this;
-            String textToShow = "Most Popular Movies";
+            clear_button_visibility = true;
+            clear_button.setVisible(clear_button_visibility);
             FavListDBHelper dbHelper = new FavListDBHelper(this);
             mDb = dbHelper.getWritableDatabase();
-//            TestUtil.insertFakeData(mDb);
-            Cursor cursor = getAllGuests();
+            Cursor cursor = getAllMovies();
             favMoviesAdapter = new FavMoviesAdapter(this, cursor);
             recyclerView.setAdapter(favMoviesAdapter);
             return true;
         }
-        new moviesDBQueryTask().execute(parseUrl);
+        else if(itemThatWasClickedId == R.id.clear_button)
+        {
+         removeAll();
+         favMoviesAdapter.swapCursor(getAllMovies());
+        }
+            new moviesDBQueryTask().execute(parseUrl);
         adapter.setMovies(moviesList);
 
         return super.onOptionsItemSelected(item);
 
+    }
+    public void removeAll()
+    {
+        FavListDBHelper dbHelper = new FavListDBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase(); // helper is object extends SQLiteOpenHelper
+        db.delete(MoviesContract.MoviesEntry.TABLE_NAME, null, null);
     }
 
     private void loadMovies(final String sortByPath) {
@@ -212,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public Cursor getAllGuests() {
+    public Cursor getAllMovies() {
         return mDb.query(MoviesContract.MoviesEntry.TABLE_NAME,
                 null,
                 null,
@@ -221,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
                 null,
                 MoviesContract.MoviesEntry._ID);
     }
+
 }
 
 
