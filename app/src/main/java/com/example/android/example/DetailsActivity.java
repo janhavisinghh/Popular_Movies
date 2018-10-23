@@ -20,7 +20,6 @@ import com.example.android.example.utilities.NetworkUtilities;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
-import java.util.ArrayList;
 
 import static com.example.android.example.MoviesContract.MoviesEntry.COLUMN_MOVIE_ID;
 import static com.example.android.example.MoviesContract.MoviesEntry.TABLE_NAME;
@@ -35,9 +34,6 @@ public class DetailsActivity extends AppCompatActivity {
     ImageView poster_iv;
     Button trailer;
     Button review_button;
-    TextView reviewer_name;
-    TextView review;
-
 
     public String title;
     public String synopsis;
@@ -51,10 +47,6 @@ public class DetailsActivity extends AppCompatActivity {
 
 
 
-    public ArrayList<Review> reviews;
-    public Review review_obj;
-
-
     public static final String BASE_PATH = "http://image.tmdb.org/t/p/w500";
     public static final String YT_BASE_PATH ="https://www.youtube.com/watch?v=";
 
@@ -62,6 +54,11 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         FavListDBHelper dbHelper = new FavListDBHelper(this);
         mDb = dbHelper.getWritableDatabase();
         title_tv = findViewById(R.id.title_tv_detail);
@@ -71,15 +68,6 @@ public class DetailsActivity extends AppCompatActivity {
         poster_iv =  findViewById(R.id.poster_iv_detail);
         trailer = (Button) findViewById(R.id.trailer_button);
         review_button = (Button) findViewById(R.id.reviews_button);
-        reviewer_name = (TextView) findViewById(R.id.reviewer_name);
-        review = (TextView) findViewById(R.id.review);
-
-
-         review_obj = new Review();
-
-
-        reviews = new ArrayList<Review>();
-
 
 
         Intent intent = getIntent();
@@ -90,8 +78,19 @@ public class DetailsActivity extends AppCompatActivity {
         poster = intent.getExtras().getString("poster_path");
         movie_id = intent.getExtras().getString("id");
 
+
+        review_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(DetailsActivity.this, ReviewActivity.class);
+                myIntent.putExtra("movie_id",movie_id);
+                startActivity(myIntent);
+            }
+        });
+
+
+
         final URL trailerUrl = NetworkUtilities.buildTrailerUrl(movie_id);
-        final URL reviewUrl = NetworkUtilities.buildReviewURL(movie_id);
 
 
         title_tv.setText(title);
@@ -101,7 +100,6 @@ public class DetailsActivity extends AppCompatActivity {
 
 
         new trailerQueryTask().execute(trailerUrl);
-        new reviewsQueryTask().execute(reviewUrl);
 
 
 
@@ -113,16 +111,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
     }
-    public void hideReviewButton(){
-        review_button.setVisibility(View.INVISIBLE);
-        review.setVisibility(View.VISIBLE);
-        reviewer_name.setVisibility(View.VISIBLE);
-    }
-    public void showReviewButton(){
-        review_button.setVisibility(View.VISIBLE);
-        review.setVisibility(View.INVISIBLE);
-        reviewer_name.setVisibility(View.INVISIBLE);
-    }
+
     public class trailerQueryTask extends AsyncTask<URL, Void, String> {
 
         @Override
@@ -235,61 +224,21 @@ public class DetailsActivity extends AppCompatActivity {
             Boolean movie_present = searchMovieInDB(movie_id);
             if (movie_present){
                 removeGuest(movie_id);
-
             }
             else
             {    addToFavMovieList();
             }
             return true;
         }
+        else if(itemThatWasClickedId== android.R.id.home){
+            finish();
+        }
 
         return super.onOptionsItemSelected(item);
 
     }
-    public class reviewsQueryTask extends AsyncTask<URL, Void, ArrayList<Review>> {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showReviewButton();
-        }
-        @Override
-        protected ArrayList<Review> doInBackground(URL... params) {
-            if (params.length == 0) {
-                return null;
-            }
-            URL parseUrl = params[0];
-            if (NetworkUtilities.isOnline()) {
-                try {
-                    String json = NetworkUtilities.getResponseFromHttpUrl(parseUrl);
-                    return NetworkUtilities.parseReviewJson(json);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-            return null;
-        }
 
-        @Override
-        protected void onPostExecute(final ArrayList<Review> MovieQueryResult) {
-            review_button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(), "Reviews" , Toast.LENGTH_SHORT).show();
-                    reviews = MovieQueryResult ;
-                    review_button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getApplicationContext(),Review.class);
-                            intent.putExtra("author", review_obj.getReviewer_name());
-                            intent.putExtra("content", review_obj.getReview());
-
-                            getApplicationContext().startActivity(intent);
-
-                        }
-                    });
-                   }});
-        }
-    }
 
 
 

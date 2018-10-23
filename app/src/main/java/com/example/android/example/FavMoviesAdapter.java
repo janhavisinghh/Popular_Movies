@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
@@ -21,6 +22,7 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
     public List<Movie> movies;
     private Context mContext;
 
+
     public static final String BASE_PATH = "http://image.tmdb.org/t/p/w342";
 
 
@@ -29,7 +31,6 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
         this.mContext = context;
         this.mCursor = cursor;
     }
-
     @Override
     public FavViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mContext = parent.getContext();
@@ -44,22 +45,35 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
         if (!mCursor.moveToPosition(position))
             return;
         String TABLE_NAME = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_TITLE));
-        String COLUMN_TITLE = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_TITLE));
-        String COLUMN_POSTER_PATH = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_POSTER_PATH));
-        String COLUMN_OVERVIEW = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_OVERVIEW));
-        String COLUMN_USER_RATING = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_USER_RATING));
-        String COLUMN_RELEASE_DATE = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE));
-        String COLUMN_MOVIE_ID = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_MOVIE_ID));
+        final String COLUMN_TITLE = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_TITLE));
+        final String COLUMN_POSTER_PATH = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_POSTER_PATH));
+        final String COLUMN_OVERVIEW = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_OVERVIEW));
+        final String COLUMN_USER_RATING = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_USER_RATING));
+        final String COLUMN_RELEASE_DATE = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE));
+        final String COLUMN_MOVIE_ID = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_MOVIE_ID));
         String poster = BASE_PATH + COLUMN_POSTER_PATH;
-        Movie movies = new Movie(COLUMN_TITLE,  COLUMN_POSTER_PATH,  COLUMN_OVERVIEW,  COLUMN_USER_RATING,
-                 COLUMN_RELEASE_DATE,  COLUMN_MOVIE_ID);
 
         Glide.with(mContext)
                 .load(poster)
                 .centerCrop()
                 .into(holder.imageView);
+        holder.bottom_Header_tv.setText(COLUMN_TITLE);
 
-//        holder.bind(position,movies, listener);
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                Intent intent = new Intent(mContext,DetailsActivity.class);
+                intent.putExtra("title", COLUMN_TITLE);
+                intent.putExtra("poster_path", COLUMN_POSTER_PATH);
+                intent.putExtra("vote_average", COLUMN_USER_RATING);
+                intent.putExtra("release_date", COLUMN_RELEASE_DATE);
+                intent.putExtra("overview", COLUMN_OVERVIEW);
+                intent.putExtra("id", COLUMN_MOVIE_ID);
+
+                mContext.startActivity(intent);
+
+            }
+        });
+
 
 
     }
@@ -79,33 +93,14 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
     class FavViewHolder extends RecyclerView.ViewHolder {
 
         final ImageView imageView;
+        private TextView bottom_Header_tv;
 
         public FavViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.thumbnail);
+            bottom_Header_tv = itemView.findViewById(R.id.bottom_header_tv);
+
         }
-//        public void bind(final int item, final Movie moviesitem, final OnItemClickListener listener) {
-//            imageView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    listener.onItemClick(moviesitem);
-//                    Intent intent = new Intent(mContext, DetailsActivity.class);
-//                    intent.putExtra("title", moviesitem.getTitle());
-//                    intent.putExtra("poster_path", moviesitem.getPoster());
-//                    intent.putExtra("vote_average", moviesitem.getUserRating());
-//                    intent.putExtra("release_date", moviesitem.getReleaseDate());
-//                    intent.putExtra("overview", moviesitem.getOverview());
-//                    intent.putExtra("id", moviesitem.getmovieID());
-//
-//                    mContext.startActivity(intent);
-//
-//                }
-//            });
-//        }
-
-
-
-
 
     }
 

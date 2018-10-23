@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import android.view.View;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private FavMoviesAdapter favMoviesAdapter;
     private MenuItem clear_button;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
 
         moviesList = new ArrayList<>();
         progressBar = (ProgressBar) findViewById(R.id.pb_loading_indicator);
@@ -153,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
         boolean clear_button_visibility;
         NetworkUtilities n = new NetworkUtilities();
         int itemThatWasClickedId = item.getItemId();
+
         if (itemThatWasClickedId == R.id.highest_rating) {
             clear_button_visibility = false;
             clear_button.setVisible(clear_button_visibility);
@@ -163,7 +167,9 @@ public class MainActivity extends AppCompatActivity {
             loadMovies(sortByPath);
             Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
             return true;
-        } else if (itemThatWasClickedId == R.id.most_popular) {
+        }
+
+        else if (itemThatWasClickedId == R.id.most_popular) {
             clear_button_visibility = false;
             clear_button.setVisible(clear_button_visibility);
             Context context = MainActivity.this;
@@ -173,7 +179,9 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setAdapter(adapter);
             Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
             return true;
-        } else if (itemThatWasClickedId == R.id.favourite) {
+        }
+
+        else if (itemThatWasClickedId == R.id.favourite) {
             clear_button_visibility = true;
             clear_button.setVisible(clear_button_visibility);
             FavListDBHelper dbHelper = new FavListDBHelper(this);
@@ -183,12 +191,15 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setAdapter(favMoviesAdapter);
             return true;
         }
+
         else if(itemThatWasClickedId == R.id.clear_button)
         {
          removeAll();
          favMoviesAdapter.swapCursor(getAllMovies());
         }
-            new moviesDBQueryTask().execute(parseUrl);
+
+        favMoviesAdapter.swapCursor(getAllMovies());
+        new moviesDBQueryTask().execute(parseUrl);
         adapter.setMovies(moviesList);
 
         return super.onOptionsItemSelected(item);

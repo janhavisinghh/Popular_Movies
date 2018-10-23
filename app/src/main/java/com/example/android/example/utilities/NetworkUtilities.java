@@ -43,11 +43,8 @@ public class NetworkUtilities {
     private static final String KEY_RELEASE_DATE = "release_date";
     private static final String KEY_MOVIEID = "id";
     private static final String SORT_BY_PARAM = "popular";
-    private static final String MOVIE_ID = "439079";
     private static final String video = "videos";
     private static final String review = "reviews";
-    private static final String YT_PARAM = "v";
-    private static final String Youtube_id = "pzD9zGcUNrw";
 
 
 

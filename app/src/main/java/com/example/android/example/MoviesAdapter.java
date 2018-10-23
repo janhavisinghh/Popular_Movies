@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -16,10 +18,8 @@ import java.util.List;
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
     public static final String BASE_PATH = "http://image.tmdb.org/t/p/w342";
     public List<Movie> movies;
-    public List<Review> reviews;
     public ImageView thumbnail;
     private Context context;
-    private int mCount;
 
     private final OnItemClickListener listener;
 
@@ -30,7 +30,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     public MoviesAdapter(OnItemClickListener listener) {
         this.listener = listener;
     }
-
 
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -61,20 +60,26 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 public class MovieViewHolder extends RecyclerView.ViewHolder  {
 
     final ImageView imageView;
+    private TextView bottom_Header_tv;
+
 
     public MovieViewHolder(View itemView) {
         super(itemView);
         imageView = itemView.findViewById(R.id.thumbnail);
-        }
+        bottom_Header_tv = itemView.findViewById(R.id.bottom_header_tv);
+
+    }
 
     public void bind(final int item, final Movie moviesitem, final OnItemClickListener listener) {
         final String posterPath = movies.get(item).getPoster();
+        final String title = movies.get(item).getTitle();
+        bottom_Header_tv.setText(title);
+
         if (posterPath.equals("null")) {
             Picasso.get().load(R.drawable.no_image).fit().centerCrop().into(imageView);
         } else {
             String posterUrl = BASE_PATH + posterPath;
             Picasso.get().load(posterUrl).fit().centerCrop().into(imageView);
-
         }
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
