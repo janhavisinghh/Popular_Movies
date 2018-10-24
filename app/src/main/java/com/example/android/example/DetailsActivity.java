@@ -181,7 +181,6 @@ public class DetailsActivity extends AppCompatActivity {
     }
     public boolean searchMovieInDB(String movie_id) {
         String[] projection = {
-                MoviesContract.MoviesEntry._ID,
                 MoviesContract.MoviesEntry.COLUMN_TITLE,
                 MoviesContract.MoviesEntry.COLUMN_MOVIE_ID,
                 MoviesContract.MoviesEntry.COLUMN_POSTER_PATH,
@@ -207,7 +206,7 @@ public class DetailsActivity extends AppCompatActivity {
                 null,
                 null,
                 null,
-                MoviesContract.MoviesEntry._ID);
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_ID);
     }
 
     @Override

@@ -19,7 +19,6 @@ public class FavListDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
         final String SQL_CREATE_WAITLIST_TABLE = "CREATE TABLE " + MoviesContract.MoviesEntry.TABLE_NAME + " (" +
-                MoviesContract.MoviesEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE," +
                 MoviesContract.MoviesEntry.COLUMN_TITLE + " TEXT NOT NULL UNIQUE, " +
                 MoviesContract.MoviesEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL UNIQUE, " +
                 MoviesContract.MoviesEntry.COLUMN_OVERVIEW + " TEXT NOT NULL UNIQUE, " +

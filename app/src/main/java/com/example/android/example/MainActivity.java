@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                 null,
                 null,
                 null,
-                MoviesContract.MoviesEntry._ID);
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_ID);
     }
 
 }

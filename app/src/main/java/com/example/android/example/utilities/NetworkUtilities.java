@@ -81,7 +81,6 @@ public class NetworkUtilities {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
         return url;
     }
     public static URL buildReviewURL(String MOVIE_ID) {
