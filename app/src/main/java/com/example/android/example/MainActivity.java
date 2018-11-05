@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
     {
         FavListDBHelper dbHelper = new FavListDBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase(); // helper is object extends SQLiteOpenHelper
-        db.delete(MoviesContract.MoviesEntry.TABLE_NAME, null, null);
+        getContentResolver().delete(MoviesContract.MoviesEntry.CONTENT_URI, null, null);
     }
 
     private void loadMovies(final String sortByPath) {
@@ -235,9 +235,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public Cursor getAllMovies() {
-        return mDb.query(MoviesContract.MoviesEntry.TABLE_NAME,
-                null,
-                null,
+        return getContentResolver().query(MoviesContract.MoviesEntry.CONTENT_URI,
                 null,
                 null,
                 null,

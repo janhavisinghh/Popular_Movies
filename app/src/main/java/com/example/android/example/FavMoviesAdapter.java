@@ -3,6 +3,7 @@ package com.example.android.example;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,13 +27,14 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
     public static final String BASE_PATH = "http://image.tmdb.org/t/p/w342";
 
 
-    public FavMoviesAdapter(Context context, Cursor cursor) {
+    public FavMoviesAdapter(@NonNull Context context, Cursor cursor) {
 
         this.mContext = context;
         this.mCursor = cursor;
     }
+    @NonNull
     @Override
-    public FavViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FavViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(R.layout.movie_card, parent, false);
@@ -41,9 +43,9 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
     }
 
     @Override
-    public void onBindViewHolder(FavViewHolder holder, final int position) {
-        if (!mCursor.moveToPosition(position))
-            return;
+    public void onBindViewHolder(@NonNull FavViewHolder holder, final int position) {
+        mCursor.moveToPosition(position);
+
         String TABLE_NAME = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_TITLE));
         final String COLUMN_TITLE = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_TITLE));
         final String COLUMN_POSTER_PATH = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_POSTER_PATH));

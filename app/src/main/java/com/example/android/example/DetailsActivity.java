@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,8 +23,7 @@ import com.squareup.picasso.Picasso;
 import java.net.URL;
 
 import static com.example.android.example.MoviesContract.MoviesEntry.COLUMN_MOVIE_ID;
-import static com.example.android.example.MoviesContract.MoviesEntry.TABLE_NAME;
-
+import static com.example.android.example.MoviesContract.MoviesEntry.CONTENT_URI;
 
 public class DetailsActivity extends AppCompatActivity {
     private static final String KEY_PARCEL = "selected_movie";
@@ -44,8 +44,23 @@ public class DetailsActivity extends AppCompatActivity {
     private SQLiteDatabase mDb;
     private FavMoviesAdapter favMoviesAdapter;
     private int _ID = -1;
+    private Menu menu;
 
-
+//    private static final int ID_DETAIL_LOADER = 353;
+//    public static final String[] projection = {
+//            MoviesContract.MoviesEntry.COLUMN_TITLE,
+//            MoviesContract.MoviesEntry.COLUMN_MOVIE_ID,
+//            MoviesContract.MoviesEntry.COLUMN_POSTER_PATH,
+//            MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE,
+//            MoviesContract.MoviesEntry.COLUMN_USER_RATING,
+//            MoviesContract.MoviesEntry.COLUMN_OVERVIEW
+//    };
+//    public static final int INDEX_TITLE = 0;
+//    public static final int INDEX_WEATHER_MOVIE_ID = 1;
+//    public static final int INDEX_WEATHER_POSTER_PATH = 2;
+//    public static final int INDEX_WEATHER_RELEASE_DATE = 3;
+//    public static final int INDEX_WEATHER_USER_RATING = 4;
+//    public static final int INDEX_WEATHER_OVERVIEW = 5;
 
     public static final String BASE_PATH = "http://image.tmdb.org/t/p/w500";
     public static final String YT_BASE_PATH ="https://www.youtube.com/watch?v=";
@@ -110,7 +125,41 @@ public class DetailsActivity extends AppCompatActivity {
             Picasso.get().load(posterUrl).fit().centerCrop().into(poster_iv);
         }
 
+
     }
+//    @Override
+//    public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArgs) {
+//
+//        switch (loaderId) {
+//
+//            case ID_DETAIL_LOADER:
+//
+//                return new CursorLoader(this, mUri,
+//                        projection,
+//                        null,
+//                        null,
+//                        null);
+//
+//            default:
+//                throw new RuntimeException("Loader Not Implemented: " + loaderId);
+//        }
+//    }
+//
+//    @Override
+//    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+//        boolean cursorHasValidData = false;
+//        if (data != null && data.moveToFirst()) {
+//            cursorHasValidData = true;
+//        }
+//
+//        if (!cursorHasValidData) {
+//            return;
+//        }
+//
+//    }
+//    @Override
+//    public void onLoaderReset(Loader<Cursor> loader) {
+//    }
 
     public class trailerQueryTask extends AsyncTask<URL, Void, String> {
 
@@ -151,7 +200,7 @@ public class DetailsActivity extends AppCompatActivity {
             });
         }
     }
-    private long addNewFavMovie(String title, String poster, String overview, String userRating,
+    private Uri addNewFavMovie(String title, String poster, String overview, String userRating,
                                 String releaseDate, String movieID) {
             ContentValues cv = new ContentValues();
             cv.put(MoviesContract.MoviesEntry.COLUMN_TITLE,title );
@@ -160,7 +209,7 @@ public class DetailsActivity extends AppCompatActivity {
             cv.put(MoviesContract.MoviesEntry.COLUMN_USER_RATING, userRating);
             cv.put(MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE, releaseDate);
             cv.put(COLUMN_MOVIE_ID, movieID);
-            return mDb.insertWithOnConflict(MoviesContract.MoviesEntry.TABLE_NAME, null, cv,SQLiteDatabase.CONFLICT_REPLACE);
+            return getContentResolver().insert(MoviesContract.MoviesEntry.CONTENT_URI, cv);
 
     }
 
@@ -170,14 +219,12 @@ public class DetailsActivity extends AppCompatActivity {
         Cursor cursor = getAllMovies();
         favMoviesAdapter = new FavMoviesAdapter(this, cursor);
         favMoviesAdapter.swapCursor(getAllMovies());
-
     }
     private void removeGuest(String movie_id) {
         Toast.makeText(getApplicationContext(),title + " Deleted!", Toast.LENGTH_SHORT);
         FavListDBHelper dbHelper = new FavListDBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete(TABLE_NAME, MoviesContract.MoviesEntry.COLUMN_MOVIE_ID + "=?", new String[]{movie_id});
-
+        getContentResolver().delete(CONTENT_URI, MoviesContract.MoviesEntry.COLUMN_MOVIE_ID + "=?", new String[]{movie_id});
     }
     public boolean searchMovieInDB(String movie_id) {
         String[] projection = {
@@ -187,22 +234,24 @@ public class DetailsActivity extends AppCompatActivity {
                 MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE,
                 MoviesContract.MoviesEntry.COLUMN_USER_RATING,
                 MoviesContract.MoviesEntry.COLUMN_OVERVIEW
-
         };
         String selection = COLUMN_MOVIE_ID + " =?";
         String[] selectionArgs = { movie_id };
         String limit = "1";
+        long id = 2;
 
-        Cursor cursor = mDb.query(MoviesContract.MoviesEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, null, limit);
+        Cursor cursor = getContentResolver().query(MoviesContract.MoviesEntry.buildTodoUriWithId(id),
+                projection,
+                selection,
+                selectionArgs,
+                limit);
         boolean movie_found = (cursor.getCount() > 0);
         cursor.close();
         return movie_found;
     }
 
     public Cursor getAllMovies() {
-        return mDb.query(MoviesContract.MoviesEntry.TABLE_NAME,
-                null,
-                null,
+        return getContentResolver().query(MoviesContract.MoviesEntry.CONTENT_URI,
                 null,
                 null,
                 null,
@@ -212,6 +261,7 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_details, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -221,11 +271,13 @@ public class DetailsActivity extends AppCompatActivity {
         int itemThatWasClickedId = item.getItemId();
         if (itemThatWasClickedId == R.id.favourite_button) {
             Boolean movie_present = searchMovieInDB(movie_id);
-            if (movie_present){
-                removeGuest(movie_id);
+            if (movie_present)
+                {   menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_red_24dp));
+                    removeGuest(movie_id);
             }
             else
-            {    addToFavMovieList();
+            {   menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_favorite_red_24dp));
+                addToFavMovieList();
             }
             return true;
         }

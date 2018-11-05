@@ -16,6 +16,7 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -23,6 +24,10 @@
         <activity android:name=".DetailsActivity" />
         <activity android:name=".ReviewActivity"
             android:label="Reviews"></activity>
+        <provider
+            android:name="com.example.android.example.FavMoviesContentProvider"
+            android:authorities="com.example.android.example"
+            android:exported="false"/>
     </application>
 
 </manifest>
