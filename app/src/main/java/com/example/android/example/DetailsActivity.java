@@ -46,21 +46,6 @@ public class DetailsActivity extends AppCompatActivity {
     private int _ID = -1;
     private Menu menu;
 
-//    private static final int ID_DETAIL_LOADER = 353;
-//    public static final String[] projection = {
-//            MoviesContract.MoviesEntry.COLUMN_TITLE,
-//            MoviesContract.MoviesEntry.COLUMN_MOVIE_ID,
-//            MoviesContract.MoviesEntry.COLUMN_POSTER_PATH,
-//            MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE,
-//            MoviesContract.MoviesEntry.COLUMN_USER_RATING,
-//            MoviesContract.MoviesEntry.COLUMN_OVERVIEW
-//    };
-//    public static final int INDEX_TITLE = 0;
-//    public static final int INDEX_WEATHER_MOVIE_ID = 1;
-//    public static final int INDEX_WEATHER_POSTER_PATH = 2;
-//    public static final int INDEX_WEATHER_RELEASE_DATE = 3;
-//    public static final int INDEX_WEATHER_USER_RATING = 4;
-//    public static final int INDEX_WEATHER_OVERVIEW = 5;
 
     public static final String BASE_PATH = "http://image.tmdb.org/t/p/w500";
     public static final String YT_BASE_PATH ="https://www.youtube.com/watch?v=";
@@ -127,40 +112,6 @@ public class DetailsActivity extends AppCompatActivity {
 
 
     }
-//    @Override
-//    public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArgs) {
-//
-//        switch (loaderId) {
-//
-//            case ID_DETAIL_LOADER:
-//
-//                return new CursorLoader(this, mUri,
-//                        projection,
-//                        null,
-//                        null,
-//                        null);
-//
-//            default:
-//                throw new RuntimeException("Loader Not Implemented: " + loaderId);
-//        }
-//    }
-//
-//    @Override
-//    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-//        boolean cursorHasValidData = false;
-//        if (data != null && data.moveToFirst()) {
-//            cursorHasValidData = true;
-//        }
-//
-//        if (!cursorHasValidData) {
-//            return;
-//        }
-//
-//    }
-//    @Override
-//    public void onLoaderReset(Loader<Cursor> loader) {
-//    }
-
     public class trailerQueryTask extends AsyncTask<URL, Void, String> {
 
         @Override
@@ -200,16 +151,22 @@ public class DetailsActivity extends AppCompatActivity {
             });
         }
     }
-    private Uri addNewFavMovie(String title, String poster, String overview, String userRating,
+    private void addNewFavMovie(String title, String poster, String overview, String userRating,
                                 String releaseDate, String movieID) {
-            ContentValues cv = new ContentValues();
+            final ContentValues cv = new ContentValues();
             cv.put(MoviesContract.MoviesEntry.COLUMN_TITLE,title );
             cv.put(MoviesContract.MoviesEntry.COLUMN_POSTER_PATH, poster);
             cv.put(MoviesContract.MoviesEntry.COLUMN_OVERVIEW, overview);
             cv.put(MoviesContract.MoviesEntry.COLUMN_USER_RATING, userRating);
             cv.put(MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE, releaseDate);
             cv.put(COLUMN_MOVIE_ID, movieID);
-            return getContentResolver().insert(MoviesContract.MoviesEntry.CONTENT_URI, cv);
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    getContentResolver().insert(MoviesContract.MoviesEntry.CONTENT_URI, cv);
+                }
+            });
+
 
     }
 
@@ -220,11 +177,17 @@ public class DetailsActivity extends AppCompatActivity {
         favMoviesAdapter = new FavMoviesAdapter(this, cursor);
         favMoviesAdapter.swapCursor(getAllMovies());
     }
-    private void removeGuest(String movie_id) {
+    private void removeGuest(final String movie_id) {
         Toast.makeText(getApplicationContext(),title + " Deleted!", Toast.LENGTH_SHORT);
         FavListDBHelper dbHelper = new FavListDBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        getContentResolver().delete(CONTENT_URI, MoviesContract.MoviesEntry.COLUMN_MOVIE_ID + "=?", new String[]{movie_id});
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                getContentResolver().delete(CONTENT_URI, MoviesContract.MoviesEntry.COLUMN_MOVIE_ID + "=?", new String[]{movie_id});
+
+            }
+        });
     }
     public boolean searchMovieInDB(String movie_id) {
         String[] projection = {

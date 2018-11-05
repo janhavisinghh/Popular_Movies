@@ -8,7 +8,7 @@ public class FavListDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "favmovlist.db";
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
 
     public FavListDBHelper(Context context) {
@@ -19,12 +19,12 @@ public class FavListDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
         final String SQL_CREATE_WAITLIST_TABLE = "CREATE TABLE " + MoviesContract.MoviesEntry.TABLE_NAME + " (" +
-                MoviesContract.MoviesEntry.COLUMN_TITLE + " TEXT NOT NULL UNIQUE, " +
-                MoviesContract.MoviesEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL UNIQUE, " +
-                MoviesContract.MoviesEntry.COLUMN_OVERVIEW + " TEXT NOT NULL UNIQUE, " +
-                MoviesContract.MoviesEntry.COLUMN_USER_RATING + " TEXT NOT NULL UNIQUE, " +
-                MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL UNIQUE, " +
-                MoviesContract.MoviesEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL PRIMARY KEY UNIQUE" + ");";
+                MoviesContract.MoviesEntry.COLUMN_TITLE + " TEXT  , " +
+                MoviesContract.MoviesEntry.COLUMN_POSTER_PATH + " TEXT , " +
+                MoviesContract.MoviesEntry.COLUMN_OVERVIEW + " TEXT , " +
+                MoviesContract.MoviesEntry.COLUMN_USER_RATING + " TEXT, " +
+                MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE + " TEXT , " +
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_ID + " TEXT PRIMARY KEY " + ");";
 
         sqLiteDatabase.execSQL(SQL_CREATE_WAITLIST_TABLE);
     }
