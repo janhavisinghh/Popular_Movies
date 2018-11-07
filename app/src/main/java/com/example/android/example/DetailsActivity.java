@@ -2,10 +2,13 @@ package com.example.android.example;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +38,7 @@ public class DetailsActivity extends AppCompatActivity {
     ImageView poster_iv;
     Button trailer;
     Button review_button;
+    RelativeLayout relativeLayout;
 
     public String title;
     public String synopsis;
@@ -45,7 +50,7 @@ public class DetailsActivity extends AppCompatActivity {
     private FavMoviesAdapter favMoviesAdapter;
     private int _ID = -1;
     private Menu menu;
-
+    private FloatingActionButton fab;
 
     public static final String BASE_PATH = "http://image.tmdb.org/t/p/w500";
     public static final String YT_BASE_PATH ="https://www.youtube.com/watch?v=";
@@ -54,10 +59,12 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
         if(getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
 
         FavListDBHelper dbHelper = new FavListDBHelper(this);
         mDb = dbHelper.getWritableDatabase();
@@ -68,6 +75,10 @@ public class DetailsActivity extends AppCompatActivity {
         poster_iv =  findViewById(R.id.poster_iv_detail);
         trailer = (Button) findViewById(R.id.trailer_button);
         review_button = (Button) findViewById(R.id.reviews_button);
+        fab = (FloatingActionButton) findViewById(R.id.favourite_button);
+        relativeLayout = (RelativeLayout) findViewById(R.id.relative_layout_da) ;
+
+
 
 
         Intent intent = getIntent();
@@ -78,13 +89,36 @@ public class DetailsActivity extends AppCompatActivity {
         poster = intent.getExtras().getString("poster_path");
         movie_id = intent.getExtras().getString("id");
 
+        if(searchMovieInDB(movie_id))
+            fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimaryAccent)));
+        else
+            fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorLight)));
+
+        setTitle(title);
 
         review_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(DetailsActivity.this, ReviewActivity.class);
                 myIntent.putExtra("movie_id",movie_id);
+                myIntent.putExtra("title",title);
                 startActivity(myIntent);
+            }
+        });
+        fab.setOnClickListener(new View.OnClickListener() {
+             boolean addToFavourite = searchMovieInDB(movie_id);
+            @Override
+            public void onClick(View view) {
+                if (addToFavourite) {
+                    fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorLight)));
+                    addToFavourite = false;
+                    removeGuest(movie_id);
+
+                } else {
+                    fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimaryAccent)));
+                    addToFavMovieList();
+                    addToFavourite = true;
+                }
             }
         });
 
@@ -104,7 +138,7 @@ public class DetailsActivity extends AppCompatActivity {
 
 
         if (poster.equals("null")) {
-            poster_iv.setImageResource(R.drawable.no_image);
+            poster_iv.setImageResource(R.drawable.clear_button);
         } else {
             String posterUrl = BASE_PATH + poster;
             Picasso.get().load(posterUrl).fit().centerCrop().into(poster_iv);
@@ -142,7 +176,6 @@ public class DetailsActivity extends AppCompatActivity {
             final String youtube_url = YT_BASE_PATH + s;
             trailer.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(), "Trailer", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtube_url));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.setPackage("com.google.android.youtube");
@@ -170,16 +203,23 @@ public class DetailsActivity extends AppCompatActivity {
 
     }
 
-    public void addToFavMovieList() {
-        Toast.makeText(getApplicationContext(),title + " Added!", Toast.LENGTH_SHORT);
+
+
+        public void addToFavMovieList() {
+            Snackbar snackbar = Snackbar
+                    .make(relativeLayout, title + " Added!", Snackbar.LENGTH_SHORT);
+
+            snackbar.show();
         addNewFavMovie(title,poster,synopsis,rating,date,movie_id);
         Cursor cursor = getAllMovies();
         favMoviesAdapter = new FavMoviesAdapter(this, cursor);
         favMoviesAdapter.swapCursor(getAllMovies());
     }
     private void removeGuest(final String movie_id) {
-        Toast.makeText(getApplicationContext(),title + " Deleted!", Toast.LENGTH_SHORT);
-        FavListDBHelper dbHelper = new FavListDBHelper(this);
+        Snackbar snackbar = Snackbar
+                .make(relativeLayout, title + " Removed!", Snackbar.LENGTH_SHORT);
+
+        snackbar.show();        FavListDBHelper dbHelper = new FavListDBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
@@ -189,7 +229,8 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
     }
-    public boolean searchMovieInDB(String movie_id) {
+
+    public boolean searchMovieInDB (String movie_id) {
         String[] projection = {
                 MoviesContract.MoviesEntry.COLUMN_TITLE,
                 MoviesContract.MoviesEntry.COLUMN_MOVIE_ID,
@@ -221,36 +262,19 @@ public class DetailsActivity extends AppCompatActivity {
                 MoviesContract.MoviesEntry.COLUMN_MOVIE_ID);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_details, menu);
-        this.menu = menu;
-        return true;
-    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int index = -1;
         int itemThatWasClickedId = item.getItemId();
-        if (itemThatWasClickedId == R.id.favourite_button) {
-            Boolean movie_present = searchMovieInDB(movie_id);
-            if (movie_present)
-                {   menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_red_24dp));
-                    removeGuest(movie_id);
-            }
-            else
-            {   menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_favorite_red_24dp));
-                addToFavMovieList();
-            }
-            return true;
-        }
-        else if(itemThatWasClickedId== android.R.id.home){
+        if(itemThatWasClickedId== android.R.id.home){
             finish();
         }
-
         return super.onOptionsItemSelected(item);
 
     }
+
 
 
 

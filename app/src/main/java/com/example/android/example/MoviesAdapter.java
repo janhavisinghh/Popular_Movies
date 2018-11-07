@@ -76,7 +76,7 @@ public class MovieViewHolder extends RecyclerView.ViewHolder  {
         bottom_Header_tv.setText(title);
 
         if (posterPath.equals("null")) {
-            Picasso.get().load(R.drawable.no_image).fit().centerCrop().into(imageView);
+            Picasso.get().load(R.drawable.clear_button).fit().centerCrop().into(imageView);
         } else {
             String posterUrl = BASE_PATH + posterPath;
             Picasso.get().load(posterUrl).fit().centerCrop().into(imageView);

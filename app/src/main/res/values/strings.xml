@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Popular Movies</string>
+    <string name="app_name">Box Office</string>
     <string name="api_key"></string>
     <string name="error_message">OOPS! Something went wrong.</string>
     <string name="user_rating_value">%1$s / 10</string>
@@ -8,6 +8,11 @@
     <string name="HighestRated">Highest Rated</string>
     <string name="favourite">Favourites</string>
     <string name="favouriteButton">Favourite Button</string>
+    <string name="PosterDetail">Movie Poster</string>
+    <string name="MovieName">Movie Name</string>
+
+
+
 
 
 

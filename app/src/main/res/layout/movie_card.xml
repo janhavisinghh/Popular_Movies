@@ -1,8 +1,11 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<FrameLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools">
+    >
 
             <ImageView
                 android:id="@+id/thumbnail"
@@ -10,6 +13,7 @@
                 android:layout_height="220dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
+                android:contentDescription="@string/PosterDetail"
                 android:scaleType="fitCenter" />
 
             <ImageView
@@ -17,6 +21,7 @@
                 android:layout_height="30dp"
                 android:background="@color/colorPrimaryDark"
                 android:alpha="0.8"
+                android:contentDescription="@string/MovieName"
                 android:layout_gravity="bottom"/>
             <TextView
                 android:layout_width="match_parent"
@@ -31,15 +36,6 @@
                 android:fitsSystemWindows="true"
                 android:layout_gravity="bottom"/>
 
-    <!--<Button-->
-        <!--android:layout_width="20dp"-->
-        <!--android:layout_height="20dp"-->
-        <!--android:layout_gravity="bottom|end"-->
-        <!--android:layout_marginRight="5dp"-->
-        <!--android:layout_marginBottom="5dp"-->
-        <!--android:id="@+id/bottom_header_fav_btn"-->
-        <!--android:background="@drawable/star_favourite" />-->
-
-
 
 </FrameLayout>
+</layout>

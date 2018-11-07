@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.example.utilities.NetworkUtilities;
 
@@ -43,17 +44,21 @@ public class ReviewActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         review_rv.setLayoutManager(layoutManager);
         review_rv.setHasFixedSize(true);
-
         reviewAdapter = new ReviewAdapter();
         review_rv.setAdapter(reviewAdapter);
+
         Intent myIntent = getIntent();
         movie_id = myIntent.getStringExtra("movie_id");
+        String title = myIntent.getStringExtra("title");
         final URL reviewUrl = NetworkUtilities.buildReviewURL(movie_id);
 
 
         new reviewsQueryTask().execute(reviewUrl);
+        setTitle(title);
+
 
     }
+
     public class reviewsQueryTask extends AsyncTask<URL, Void, ArrayList<Review>> {
 
         @Override
@@ -81,18 +86,21 @@ public class ReviewActivity extends AppCompatActivity {
         protected void onPostExecute(final ArrayList<Review> ReviewQueryResult) {
             if (ReviewQueryResult != null) {
                 reviews = ReviewQueryResult;
+                if(reviews.size()==0){
 
-                reviewAdapter.setReviews(ReviewQueryResult);
-                showReviewData();
+                    Toast.makeText(getApplicationContext(),"No Reviews Found",Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                else {
+                    reviewAdapter.setReviews(ReviewQueryResult);
+                    showReviewData();
+                }
             }
 
         }
+
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_details, menu);
-        return true;
-    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

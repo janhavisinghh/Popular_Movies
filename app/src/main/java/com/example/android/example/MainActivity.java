@@ -1,11 +1,15 @@
 package com.example.android.example;
 
+import android.app.ActionBar;
 import android.content.Context;
 
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,6 +24,7 @@ import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.example.databinding.ActivityMainBinding;
 import com.example.android.example.utilities.NetworkUtilities;
 
 
@@ -31,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
     private static final int SPAN_COUNT = 3;
+    private static final int SPAN_COUNT_Landscape = 5;
     private ArrayList<Movie> moviesList;
     private static final String KEY_PARCEL_MOVIE_LIST = "movies_list";
     private String sortByPath;
@@ -41,12 +47,14 @@ public class MainActivity extends AppCompatActivity {
     private static SQLiteDatabase mDb;
     private FavMoviesAdapter favMoviesAdapter;
     private MenuItem clear_button;
+    private ActivityMainBinding activityMainBinding;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -56,8 +64,12 @@ public class MainActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.pb_loading_indicator);
         errorMessageTV = (TextView) findViewById(R.id.tv_error_message);
 
-        GridLayoutManager mLayoutManager = new GridLayoutManager(this, SPAN_COUNT);
-        recyclerView.setLayoutManager(mLayoutManager);
+        if(MainActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            recyclerView.setLayoutManager(new GridLayoutManager(this, SPAN_COUNT));
+        }
+        else{
+            recyclerView.setLayoutManager(new GridLayoutManager(this, SPAN_COUNT_Landscape));
+        }
         recyclerView.setHasFixedSize(true);
         adapter = new MoviesAdapter(new MoviesAdapter.OnItemClickListener() {
             @Override
@@ -161,11 +173,15 @@ public class MainActivity extends AppCompatActivity {
             clear_button_visibility = false;
             clear_button.setVisible(clear_button_visibility);
             Context context = MainActivity.this;
-            String textToShow = "Highest Rating Movies";
+            String textToShow = "Highest Rated Movies";
             sortByPath = "top_rated";
+            setTitle(textToShow);
             recyclerView.setAdapter(adapter);
             loadMovies(sortByPath);
-            Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar
+                    .make(recyclerView, textToShow, Snackbar.LENGTH_SHORT);
+
+            snackbar.show();
             return true;
         }
 
@@ -173,11 +189,15 @@ public class MainActivity extends AppCompatActivity {
             clear_button_visibility = false;
             clear_button.setVisible(clear_button_visibility);
             Context context = MainActivity.this;
-            String textToShow = "Most Popular Movies";
+            String textToShow = "Popular Movies";
             sortByPath = "popular";
             loadMovies(sortByPath);
+            setTitle(textToShow);
             recyclerView.setAdapter(adapter);
-            Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar
+                    .make(recyclerView, textToShow, Snackbar.LENGTH_SHORT);
+
+            snackbar.show();
             return true;
         }
 
@@ -187,8 +207,14 @@ public class MainActivity extends AppCompatActivity {
             FavListDBHelper dbHelper = new FavListDBHelper(this);
             mDb = dbHelper.getWritableDatabase();
             Cursor cursor = getAllMovies();
+            String textToShow = "Favourite Movies";
+            setTitle(textToShow);
             favMoviesAdapter = new FavMoviesAdapter(this, cursor);
             recyclerView.setAdapter(favMoviesAdapter);
+            Snackbar snackbar = Snackbar
+                    .make(recyclerView, textToShow, Snackbar.LENGTH_SHORT);
+
+            snackbar.show();
             return true;
         }
 
