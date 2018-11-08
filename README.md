@@ -11,9 +11,7 @@ You can sort the list by Highest Rated, Most Popular, and Favourite Movies. <br>
 <img src="https://github.com/janhavisinghh/Popular_Movies/blob/master/ScreenShots/Sort%20.jpg" width="250" align="middle"><br>
 
 You can see the details of every movie. The trailer, Reviews, Rating, etc.<br>
-<img src="https://github.com/janhavisinghh/Popular_Movies/blob/master/ScreenShots/Fav%20or%20UnFav.jpg" width="250">
-<img src="https://github.com/janhavisinghh/Popular_Movies/blob/master/ScreenShots/Reviews.jpg" width="250">
-<img src="https://github.com/janhavisinghh/Popular_Movies/blob/master/ScreenShots/Trailers.jpg" width="250">
+<img src="https://github.com/janhavisinghh/Popular_Movies/blob/master/ScreenShots/gifmaker_20181108010305.gif" width="250">
 <br>
 You can also favourite and un-favourite a movie.<br>
 <img src="https://github.com/janhavisinghh/Popular_Movies/blob/master/ScreenShots/fav.jpg" width="250">
