@@ -1,4 +1,4 @@
-package com.example.android.example;
+package com.example.android.example.Activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -7,9 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.Toast;
 
+import com.example.android.example.Adapters.TrailerAdapter;
+import com.example.android.example.Data.Trailer;
+import com.example.android.example.R;
 import com.example.android.example.utilities.NetworkUtilities;
 
 import java.net.URL;

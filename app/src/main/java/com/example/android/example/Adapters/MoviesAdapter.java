@@ -1,8 +1,7 @@
-package com.example.android.example;
+package com.example.android.example.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.example.Data.Movie;
+import com.example.android.example.Activity.DetailsActivity;
+import com.example.android.example.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

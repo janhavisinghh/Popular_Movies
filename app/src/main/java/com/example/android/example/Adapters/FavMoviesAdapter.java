@@ -1,4 +1,4 @@
-package com.example.android.example;
+package com.example.android.example.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,12 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
+import com.example.android.example.Activity.DetailsActivity;
+import com.example.android.example.Data.Movie;
+import com.example.android.example.Database.MoviesContract;
+import com.example.android.example.R;
 
 import java.util.List;
 

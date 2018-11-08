@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -18,17 +18,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailsActivity" />
+        <activity android:name=".Activity.DetailsActivity" />
         <activity
-            android:name=".ReviewActivity"
+            android:name=".Activity.ReviewActivity"
             android:label="Reviews" />
 
         <provider
-            android:name=".FavMoviesContentProvider"
+            android:name=".Database.FavMoviesContentProvider"
             android:authorities="com.example.android.example"
             android:exported="false" />
 
-        <activity android:name=".TrailerActivity"></activity>
+        <activity android:name=".Activity.TrailerActivity"></activity>
     </application>
 
 </manifest>

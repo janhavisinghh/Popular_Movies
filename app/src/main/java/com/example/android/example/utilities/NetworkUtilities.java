@@ -2,9 +2,9 @@ package com.example.android.example.utilities;
 
 import android.net.Uri;
 
-import com.example.android.example.Movie;
-import com.example.android.example.Review;
-import com.example.android.example.Trailer;
+import com.example.android.example.Data.Movie;
+import com.example.android.example.Data.Review;
+import com.example.android.example.Data.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;

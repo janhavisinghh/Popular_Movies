@@ -1,7 +1,6 @@
-package com.example.android.example;
+package com.example.android.example.Database;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -12,9 +11,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import static com.example.android.example.MoviesContract.MoviesEntry.COLUMN_MOVIE_ID;
-import static com.example.android.example.MoviesContract.MoviesEntry.TABLE_NAME;
-import static com.example.android.example.MoviesContract.MoviesEntry.buildTodoUriWithId;
+import static com.example.android.example.Database.MoviesContract.MoviesEntry.COLUMN_MOVIE_ID;
+import static com.example.android.example.Database.MoviesContract.MoviesEntry.TABLE_NAME;
+import static com.example.android.example.Database.MoviesContract.MoviesEntry.buildTodoUriWithId;
 
 public class FavMoviesContentProvider extends ContentProvider {
     private FavListDBHelper favListDBHelper;

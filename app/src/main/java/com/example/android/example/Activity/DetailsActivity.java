@@ -1,15 +1,12 @@
-package com.example.android.example;
+package com.example.android.example.Activity;
 
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,16 +16,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.android.example.utilities.NetworkUtilities;
+import com.example.android.example.Adapters.FavMoviesAdapter;
+import com.example.android.example.AppExecutors;
+import com.example.android.example.Database.FavListDBHelper;
+import com.example.android.example.Database.MoviesContract;
+import com.example.android.example.R;
 import com.squareup.picasso.Picasso;
 
-import java.net.URL;
-import java.util.ArrayList;
-
-import static com.example.android.example.MoviesContract.MoviesEntry.COLUMN_MOVIE_ID;
-import static com.example.android.example.MoviesContract.MoviesEntry.CONTENT_URI;
+import static com.example.android.example.Database.MoviesContract.MoviesEntry.COLUMN_MOVIE_ID;
+import static com.example.android.example.Database.MoviesContract.MoviesEntry.CONTENT_URI;
 
 public class DetailsActivity extends AppCompatActivity {
     private static final String KEY_PARCEL = "selected_movie";
@@ -246,11 +243,6 @@ public class DetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
 
     }
-
-
-
-
-
 
 }
 

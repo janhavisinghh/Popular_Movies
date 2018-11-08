@@ -1,4 +1,4 @@
-package com.example.android.example;
+package com.example.android.example.Activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -6,12 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.example.Adapters.ReviewAdapter;
+import com.example.android.example.Data.Review;
+import com.example.android.example.R;
 import com.example.android.example.utilities.NetworkUtilities;
 
 import java.net.URL;

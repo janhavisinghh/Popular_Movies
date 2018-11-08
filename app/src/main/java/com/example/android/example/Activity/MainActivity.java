@@ -1,6 +1,5 @@
-package com.example.android.example;
+package com.example.android.example.Activity;
 
-import android.app.ActionBar;
 import android.content.Context;
 
 import android.content.res.Configuration;
@@ -13,17 +12,21 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import android.view.View;
 
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.example.Adapters.FavMoviesAdapter;
+import com.example.android.example.Adapters.MoviesAdapter;
+import com.example.android.example.Data.Movie;
+import com.example.android.example.Database.FavListDBHelper;
+import com.example.android.example.Database.MoviesContract;
+import com.example.android.example.R;
 import com.example.android.example.databinding.ActivityMainBinding;
 import com.example.android.example.utilities.NetworkUtilities;
 
@@ -168,12 +171,13 @@ public class MainActivity extends AppCompatActivity {
         boolean clear_button_visibility;
         NetworkUtilities n = new NetworkUtilities();
         int itemThatWasClickedId = item.getItemId();
+        String textToShow="Popular Movies";
 
         if (itemThatWasClickedId == R.id.highest_rating) {
             clear_button_visibility = false;
             clear_button.setVisible(clear_button_visibility);
             Context context = MainActivity.this;
-            String textToShow = "Highest Rated Movies";
+             textToShow = "Highest Rated Movies";
             sortByPath = "top_rated";
             setTitle(textToShow);
             recyclerView.setAdapter(adapter);
@@ -189,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
             clear_button_visibility = false;
             clear_button.setVisible(clear_button_visibility);
             Context context = MainActivity.this;
-            String textToShow = "Popular Movies";
+             textToShow = "Popular Movies";
             sortByPath = "popular";
             loadMovies(sortByPath);
             setTitle(textToShow);
@@ -207,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
             FavListDBHelper dbHelper = new FavListDBHelper(this);
             mDb = dbHelper.getWritableDatabase();
             Cursor cursor = getAllMovies();
-            String textToShow = "Favourite Movies";
+             textToShow = "Favourite Movies";
             setTitle(textToShow);
             favMoviesAdapter = new FavMoviesAdapter(this, cursor);
             recyclerView.setAdapter(favMoviesAdapter);
@@ -223,8 +227,13 @@ public class MainActivity extends AppCompatActivity {
         else if(itemThatWasClickedId == R.id.clear_button)
         {
          removeAll();
+         favMoviesAdapter.swapCursor(getAllMovies());
         }
+        if(favMoviesAdapter!=null)
+            favMoviesAdapter.swapCursor(getAllMovies());
+
         new moviesDBQueryTask().execute(parseUrl);
+
         adapter.setMovies(moviesList);
 
         return super.onOptionsItemSelected(item);
@@ -265,6 +274,18 @@ public class MainActivity extends AppCompatActivity {
                 null,
                 null,
                 MoviesContract.MoviesEntry.COLUMN_MOVIE_ID);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(favMoviesAdapter!=null)
+            favMoviesAdapter.swapCursor(getAllMovies());
+
+        new moviesDBQueryTask().execute(parseUrl);
+
+        adapter.setMovies(moviesList);
     }
 
 }
