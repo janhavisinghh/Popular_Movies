@@ -14,8 +14,8 @@ You can see the details of every movie. The trailer, Reviews, Rating, etc.<br>
 <img src="https://github.com/janhavisinghh/Popular_Movies/blob/master/ScreenShots/gifmaker_20181108010305.gif" width="250">
 <br>
 You can also favourite and un-favourite a movie.<br>
-<img src="https://github.com/janhavisinghh/Popular_Movies/blob/master/ScreenShots/fav.jpg" width="250">
-<img src="https://github.com/janhavisinghh/Popular_Movies/blob/master/ScreenShots/un-fav.jpg" width="250"><br>
+<img src="https://github.com/janhavisinghh/Popular_Movies/blob/master/ScreenShots/gifmaker_20181108010837.gif" width="250">
+<br>
 And sort the list and see your Favourited Movies.<br>
 <img src="https://github.com/janhavisinghh/Popular_Movies/blob/master/ScreenShots/Favourite%20Movies%20DB.jpg" width="250" align="middle"><br>
 <br>
