@@ -25,6 +25,7 @@ import com.example.android.example.utilities.NetworkUtilities;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 import static com.example.android.example.MoviesContract.MoviesEntry.COLUMN_MOVIE_ID;
 import static com.example.android.example.MoviesContract.MoviesEntry.CONTENT_URI;
@@ -53,7 +54,6 @@ public class DetailsActivity extends AppCompatActivity {
     private FloatingActionButton fab;
 
     public static final String BASE_PATH = "http://image.tmdb.org/t/p/w500";
-    public static final String YT_BASE_PATH ="https://www.youtube.com/watch?v=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +105,15 @@ public class DetailsActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
+        trailer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(DetailsActivity.this, TrailerActivity.class);
+                myIntent.putExtra("movie_id",movie_id);
+                myIntent.putExtra("title",title);
+                startActivity(myIntent);
+            }
+        });
         fab.setOnClickListener(new View.OnClickListener() {
              boolean addToFavourite = searchMovieInDB(movie_id);
             @Override
@@ -124,7 +133,7 @@ public class DetailsActivity extends AppCompatActivity {
 
 
 
-        final URL trailerUrl = NetworkUtilities.buildTrailerUrl(movie_id);
+//        final URL trailerUrl = NetworkUtilities.buildTrailerUrl(movie_id);
 
 
         title_tv.setText(title);
@@ -133,7 +142,7 @@ public class DetailsActivity extends AppCompatActivity {
         date_tv.setText(date);
 
 
-        new trailerQueryTask().execute(trailerUrl);
+//        new trailerQueryTask().execute(trailerUrl);
 
 
 
@@ -146,44 +155,7 @@ public class DetailsActivity extends AppCompatActivity {
 
 
     }
-    public class trailerQueryTask extends AsyncTask<URL, Void, String> {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(URL... params) {
-            if (params.length == 0) {
-                return null;
-            }
-            URL parseUrl = params[0];
-            if (NetworkUtilities.isOnline()) {
-                try {
-                    String json = NetworkUtilities.getResponseFromHttpUrl(parseUrl);
-                    return NetworkUtilities.parseTrailerJSON(json);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            final String youtube_url = YT_BASE_PATH + s;
-            trailer.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtube_url));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.setPackage("com.google.android.youtube");
-                    startActivity(intent);
-                }
-            });
-        }
-    }
     private void addNewFavMovie(String title, String poster, String overview, String userRating,
                                 String releaseDate, String movieID) {
             final ContentValues cv = new ContentValues();

@@ -215,16 +215,15 @@ public class MainActivity extends AppCompatActivity {
                     .make(recyclerView, textToShow, Snackbar.LENGTH_SHORT);
 
             snackbar.show();
+            favMoviesAdapter.swapCursor(getAllMovies());
+
             return true;
         }
 
         else if(itemThatWasClickedId == R.id.clear_button)
         {
          removeAll();
-         favMoviesAdapter.swapCursor(getAllMovies());
         }
-
-        favMoviesAdapter.swapCursor(getAllMovies());
         new moviesDBQueryTask().execute(parseUrl);
         adapter.setMovies(moviesList);
 

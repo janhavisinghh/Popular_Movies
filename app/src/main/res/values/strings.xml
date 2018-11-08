@@ -10,10 +10,7 @@
     <string name="favouriteButton">Favourite Button</string>
     <string name="PosterDetail">Movie Poster</string>
     <string name="MovieName">Movie Name</string>
-
-
-
-
+    <string name="share">Share</string>
 
 
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>

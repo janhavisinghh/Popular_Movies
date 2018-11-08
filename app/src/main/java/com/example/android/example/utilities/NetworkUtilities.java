@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import com.example.android.example.Movie;
 import com.example.android.example.Review;
+import com.example.android.example.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +24,7 @@ import java.util.Scanner;
 public class NetworkUtilities {
     final static String POPMOV_BASE_URL =
             "https://api.themoviedb.org/3/movie";
-    private static final String Youtube_BaseURL =
+    public static final String Youtube_BaseURL =
             "https://www.youtube.com/watch";
 
 
@@ -37,6 +38,9 @@ public class NetworkUtilities {
     private static final String KEY_AUTHOR = "author";
     private static final String KEY_CONTENT = "content";
     private static final String KEY_ID = "key";
+    private static final String Trailer_TITLE = "name";
+    private static final String Trailer_TYPE = "type";
+
     private static final String KEY_POSTER_PATH = "poster_path";
     private static final String KEY_OVERVIEW = "overview";
     private static final String KEY_USER_RATING = "vote_average";
@@ -159,17 +163,21 @@ public class NetworkUtilities {
         }
         return movies;
     }
-    public static String parseTrailerJSON(String json) throws JSONException {
+    public static ArrayList<Trailer> parseTrailerJSON(String json) throws JSONException {
 
         JSONObject root = new JSONObject(json);
         JSONArray results = root.getJSONArray(KEY_RESULTS);
 
-            JSONObject result = results.getJSONObject(0);
-            String youtube_id = result.getString(KEY_ID);
-            if(youtube_id !=null)
-        return youtube_id;
-            else
-                return null;
+        ArrayList<Trailer> trailers = new ArrayList<>();
+
+        for (int i = 0; i < results.length(); i++) {
+            JSONObject result = results.getJSONObject(i);
+                String youtube_id = result.getString(KEY_ID);
+                String trailer_name = result.getString(Trailer_TITLE);
+                String trailer_type = result.getString(Trailer_TYPE);
+                trailers.add(new Trailer(trailer_name, youtube_id, trailer_type));
+            }
+        return trailers;
     }
     public static ArrayList<Review> parseReviewJson(String json) throws JSONException {
 
