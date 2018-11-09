@@ -32,7 +32,7 @@ public class NetworkUtilities {
 
     final static String PARAM_LANG = "language";
     final static String lang = "en-US";
-    final static String api_key = "267b5b0e4de9ead6b9925df334cc7eba" ;
+    final static String api_key = "" ;
     private static final String KEY_RESULTS = "results";
     private static final String KEY_TITLE = "title";
     private static final String KEY_AUTHOR = "author";
