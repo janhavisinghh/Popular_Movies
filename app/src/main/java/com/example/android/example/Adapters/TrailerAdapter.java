@@ -2,6 +2,8 @@ package com.example.android.example.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.PopupMenu;
@@ -22,7 +24,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerViewHolder> {
-    public static final String YT_BASE_PATH ="https://www.youtube.com/watch?v=";
+    public static final String YT_BASE_PATH ="http://www.youtube.com/watch?v=";
 
 
     final private TrailerClickListener trailerClickListener;
@@ -121,7 +123,11 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            trailerClickListener.onClick(trailers.get(position).getTrailer_thumbnail());
+            String youtube_url = YT_BASE_PATH + trailers.get(position).getTrailer_thumbnail();
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtube_url));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setPackage("com.google.android.youtube");
+            context.startActivity(intent);
         }
     }
 
