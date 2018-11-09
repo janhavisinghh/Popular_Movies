@@ -19,18 +19,18 @@ import android.widget.TextView;
 
 import com.example.android.example.R;
 import com.example.android.example.Data.Trailer;
+import com.example.android.example.TrailerViewHolder;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerViewHolder> {
+public class TrailerAdapter extends RecyclerView.Adapter<TrailerViewHolder> {
     public static final String YT_BASE_PATH ="http://www.youtube.com/watch?v=";
 
 
     final private TrailerClickListener trailerClickListener;
-    List<Trailer> trailers;
+    public List<Trailer> trailers;
     private Activity activity;
-    private String youtube_thumbail = "https://img.youtube.com/vi/";
 
     public TrailerAdapter(Activity activity, TrailerClickListener trailerClickListener) {
         this.activity = activity;
@@ -42,7 +42,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
     public TrailerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.trailer_item, parent, false);
-        return new TrailerViewHolder(view, context);
+        return new TrailerViewHolder(view, context, trailers);
     }
 
     @Override
@@ -92,43 +92,6 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
 
     public interface TrailerClickListener {
         void onClick(String movieKey);
-    }
-
-    public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        ImageView trailerImageView;
-        TextView videoTitleTextView;
-        TextView videoTypeTextView;
-        ImageView shareIcon;
-        Context context;
-
-        public TrailerViewHolder(View itemView, final Context context) {
-            super(itemView);
-            trailerImageView = (ImageView) itemView.findViewById(R.id.iv_detail_trailer);
-            videoTitleTextView = itemView.findViewById(R.id.tv_video_title);
-            videoTypeTextView = itemView.findViewById(R.id.tv_video_type);
-            shareIcon = itemView.findViewById(R.id.share_icon);
-
-            this.context = context;
-            itemView.setOnClickListener(this);
-        }
-
-        void bind(int listIndex) {
-            String trailerThumbnailUrl = youtube_thumbail + trailers.get(listIndex).getTrailer_thumbnail() + "/maxresdefault.jpg";
-            Picasso.get().load(trailerThumbnailUrl).placeholder(R.drawable.black_default).error(R.drawable.black_default).centerCrop().fit().into(trailerImageView);
-            videoTitleTextView.setText(trailers.get(listIndex).getTrailer_name());
-            videoTypeTextView.setText(trailers.get(listIndex).getTrailer_type());
-        }
-
-        @Override
-        public void onClick(View view) {
-            int position = getAdapterPosition();
-            String youtube_url = YT_BASE_PATH + trailers.get(position).getTrailer_thumbnail();
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtube_url));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setPackage("com.google.android.youtube");
-            context.startActivity(intent);
-        }
     }
 
 }
