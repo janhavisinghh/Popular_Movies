@@ -22,17 +22,15 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class NetworkUtilities {
-    final static String POPMOV_BASE_URL =
-            "https://api.themoviedb.org/3/movie";
     public static final String Youtube_BaseURL =
             "https://www.youtube.com/watch";
-
-
+    final static String POPMOV_BASE_URL =
+            "https://api.themoviedb.org/3/movie";
     final static String PARAM_API_KEY = "api_key";
 
     final static String PARAM_LANG = "language";
     final static String lang = "en-US";
-    final static String api_key = "" ;
+    final static String api_key = "267b5b0e4de9ead6b9925df334cc7eba";
     private static final String KEY_RESULTS = "results";
     private static final String KEY_TITLE = "title";
     private static final String KEY_AUTHOR = "author";
@@ -51,8 +49,9 @@ public class NetworkUtilities {
     private static final String review = "reviews";
 
 
-
-
+    /**
+     * @return
+     */
     public static URL buildUrl() {
 
         Uri builtUri = Uri.parse(POPMOV_BASE_URL).buildUpon()
@@ -70,6 +69,11 @@ public class NetworkUtilities {
 
         return url;
     }
+
+    /**
+     * @param MOVIE_ID
+     * @return
+     */
     public static URL buildTrailerUrl(String MOVIE_ID) {
 
         Uri builtUri = Uri.parse(POPMOV_BASE_URL).buildUpon()
@@ -87,6 +91,11 @@ public class NetworkUtilities {
         }
         return url;
     }
+
+    /**
+     * @param MOVIE_ID
+     * @return
+     */
     public static URL buildReviewURL(String MOVIE_ID) {
 
         Uri builtUri = Uri.parse(POPMOV_BASE_URL).buildUpon()
@@ -106,6 +115,10 @@ public class NetworkUtilities {
         return url;
     }
 
+    /**
+     * @param SORT_BY_PARAM
+     * @return
+     */
     public static URL buildUrl(String SORT_BY_PARAM) {
 
         Uri builtUri = Uri.parse(POPMOV_BASE_URL).buildUpon()
@@ -125,7 +138,11 @@ public class NetworkUtilities {
     }
 
 
-
+    /**
+     * @param url
+     * @return
+     * @throws IOException
+     */
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
@@ -144,6 +161,12 @@ public class NetworkUtilities {
             urlConnection.disconnect();
         }
     }
+
+    /**
+     * @param json
+     * @return
+     * @throws JSONException
+     */
     public static ArrayList<Movie> parseMovieJson(String json) throws JSONException {
 
         JSONObject root = new JSONObject(json);
@@ -163,6 +186,12 @@ public class NetworkUtilities {
         }
         return movies;
     }
+
+    /**
+     * @param json
+     * @return
+     * @throws JSONException
+     */
     public static ArrayList<Trailer> parseTrailerJSON(String json) throws JSONException {
 
         JSONObject root = new JSONObject(json);
@@ -172,13 +201,19 @@ public class NetworkUtilities {
 
         for (int i = 0; i < results.length(); i++) {
             JSONObject result = results.getJSONObject(i);
-                String youtube_id = result.getString(KEY_ID);
-                String trailer_name = result.getString(Trailer_TITLE);
-                String trailer_type = result.getString(Trailer_TYPE);
-                trailers.add(new Trailer(trailer_name, youtube_id, trailer_type));
-            }
+            String youtube_id = result.getString(KEY_ID);
+            String trailer_name = result.getString(Trailer_TITLE);
+            String trailer_type = result.getString(Trailer_TYPE);
+            trailers.add(new Trailer(trailer_name, youtube_id, trailer_type));
+        }
         return trailers;
     }
+
+    /**
+     * @param json
+     * @return
+     * @throws JSONException
+     */
     public static ArrayList<Review> parseReviewJson(String json) throws JSONException {
 
         JSONObject root = new JSONObject(json);
@@ -194,13 +229,25 @@ public class NetworkUtilities {
         }
         return reviews;
     }
+
+    /**
+     * @return
+     */
     public static URL getDefaultSortByPathUrl() {
         return buildUrl();
     }
+
+    /**
+     * @param SORT_BY_PARAM
+     * @return
+     */
     public static URL getSortByPathUrl(String SORT_BY_PARAM) {
         return buildUrl(SORT_BY_PARAM);
     }
 
+    /**
+     * @return
+     */
     public static boolean isOnline() {
         try {
             int timeoutMs = 1500;

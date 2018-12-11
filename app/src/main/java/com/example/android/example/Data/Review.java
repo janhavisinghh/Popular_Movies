@@ -18,18 +18,21 @@ public class Review implements Parcelable {
     };
     private String reviewer_name;
     private String review;
-    public Review()
-    {
-        review = reviewer_name = null ;
+
+    public Review() {
+        review = reviewer_name = null;
     }
-    public Review(String reviewer_name, String review){
+
+    public Review(String reviewer_name, String review) {
         this.reviewer_name = reviewer_name;
         this.review = review;
     }
-    public String getReviewer_name(){
+
+    public String getReviewer_name() {
         return reviewer_name;
     }
-    public String getReview(){
+
+    public String getReview() {
         return review;
     }
 

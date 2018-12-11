@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Movie implements Parcelable{
+public class Movie implements Parcelable {
 
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
         @Override
@@ -29,6 +29,14 @@ public class Movie implements Parcelable{
     private String releaseDate;
     private String movieID;
 
+    /**
+     * @param title
+     * @param poster
+     * @param overview
+     * @param userRating
+     * @param releaseDate
+     * @param movieID
+     */
     public Movie(String title, String poster, String overview, String userRating,
                  String releaseDate, String movieID) {
         this.title = title;
@@ -39,6 +47,9 @@ public class Movie implements Parcelable{
         this.movieID = movieID;
     }
 
+    /**
+     * @param source
+     */
     public Movie(Parcel source) {
         this.title = source.readString();
         this.poster = source.readString();
@@ -48,10 +59,14 @@ public class Movie implements Parcelable{
         this.movieID = source.readString();
     }
 
+    /**
+     * @return
+     */
     public String getOverview() {
 
         return overview;
     }
+
 
     public String getTitle() {
 
@@ -83,9 +98,6 @@ public class Movie implements Parcelable{
     public String getmovieID() {
         return movieID;
     }
-
-
-
 
 
     @Override

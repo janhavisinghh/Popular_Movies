@@ -16,15 +16,15 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/clear_button"
+        android:icon="@drawable/clear_button"
         android:title="Clear Button"
-        app:showAsAction="always"
         android:visible="false"
-        android:icon="@drawable/clear_button"/>
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/refresh_button"
+        android:icon="@drawable/refresh"
         android:title="Favourite Button"
-        app:showAsAction="always"
-        android:icon="@drawable/refresh"/>
+        app:showAsAction="always" />
 
 </menu>

@@ -2,8 +2,6 @@ package com.example.android.example.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.PopupMenu;
@@ -14,29 +12,35 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.example.android.example.R;
 import com.example.android.example.Data.Trailer;
+import com.example.android.example.R;
 import com.example.android.example.TrailerViewHolder;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class TrailerAdapter extends RecyclerView.Adapter<TrailerViewHolder> {
-    public static final String YT_BASE_PATH ="http://www.youtube.com/watch?v=";
+    public static final String YT_BASE_PATH = "http://www.youtube.com/watch?v=";
 
 
     final private TrailerClickListener trailerClickListener;
     public List<Trailer> trailers;
     private Activity activity;
 
+    /**
+     * @param activity
+     * @param trailerClickListener
+     */
     public TrailerAdapter(Activity activity, TrailerClickListener trailerClickListener) {
         this.activity = activity;
         this.trailerClickListener = trailerClickListener;
     }
 
+    /**
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @NonNull
     @Override
     public TrailerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,6 +49,10 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerViewHolder> {
         return new TrailerViewHolder(view, context, trailers);
     }
 
+    /**
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull final TrailerViewHolder holder, final int position) {
         holder.bind(holder.getAdapterPosition());
@@ -57,6 +65,11 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerViewHolder> {
                 menu.show();
 
                 menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    /**
+                     *
+                     * @param menuItem
+                     * @return
+                     */
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         int id = menuItem.getItemId();
@@ -85,6 +98,9 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerViewHolder> {
         return trailers.size();
     }
 
+    /**
+     * @param trailers
+     */
     public void setTrailers(List<Trailer> trailers) {
         this.trailers = trailers;
         notifyDataSetChanged();

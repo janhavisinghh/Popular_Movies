@@ -2,8 +2,8 @@ package com.example.android.example.Activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -20,24 +20,25 @@ import java.util.ArrayList;
 
 public class ReviewActivity extends AppCompatActivity {
 
-    private ReviewAdapter reviewAdapter;
     public ArrayList<Review> reviews;
+    private ReviewAdapter reviewAdapter;
     private RecyclerView review_rv;
     private String movie_id;
 
-
+    /**
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
-        if(getSupportActionBar()!=null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
 
         review_rv = (RecyclerView) findViewById(R.id.review_rv);
-
 
 
         reviews = new ArrayList<Review>();
@@ -60,12 +61,37 @@ public class ReviewActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int index = -1;
+        int itemThatWasClickedId = item.getItemId();
+        if (itemThatWasClickedId == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    private void showReviewData() {
+        review_rv.setVisibility(View.VISIBLE);
+    }
+
     public class reviewsQueryTask extends AsyncTask<URL, Void, ArrayList<Review>> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
+
+        /**
+         * @param params
+         * @return
+         */
         @Override
         protected ArrayList<Review> doInBackground(URL... params) {
             if (params.length == 0) {
@@ -83,16 +109,18 @@ public class ReviewActivity extends AppCompatActivity {
             return null;
         }
 
+        /**
+         * @param ReviewQueryResult
+         */
         @Override
         protected void onPostExecute(final ArrayList<Review> ReviewQueryResult) {
             if (ReviewQueryResult != null) {
                 reviews = ReviewQueryResult;
-                if(reviews.size()==0){
+                if (reviews.size() == 0) {
 
-                    Toast.makeText(getApplicationContext(),"No Reviews Found",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "No Reviews Found", Toast.LENGTH_SHORT).show();
                     finish();
-                }
-                else {
+                } else {
                     reviewAdapter.setReviews(ReviewQueryResult);
                     showReviewData();
                 }
@@ -100,21 +128,5 @@ public class ReviewActivity extends AppCompatActivity {
 
         }
 
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int index = -1;
-        int itemThatWasClickedId = item.getItemId();
-        if(itemThatWasClickedId== android.R.id.home){
-            finish();
-        }
-
-        return super.onOptionsItemSelected(item);
-
-    }
-    private void showReviewData() {
-        review_rv.setVisibility(View.VISIBLE);
     }
 }

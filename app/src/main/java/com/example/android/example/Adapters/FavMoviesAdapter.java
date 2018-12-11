@@ -21,19 +21,26 @@ import java.util.List;
 
 public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavViewHolder> {
 
-    private Cursor mCursor;
+    public static final String BASE_PATH = "http://image.tmdb.org/t/p/w342";
     public List<Movie> movies;
+    private Cursor mCursor;
     private Context mContext;
 
-
-    public static final String BASE_PATH = "http://image.tmdb.org/t/p/w342";
-
-
+    /**
+     * @param context
+     * @param cursor
+     */
     public FavMoviesAdapter(@NonNull Context context, Cursor cursor) {
 
         this.mContext = context;
         this.mCursor = cursor;
     }
+
+    /**
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @NonNull
     @Override
     public FavViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,6 +51,10 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
         return new FavViewHolder(view);
     }
 
+    /**
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull FavViewHolder holder, final int position) {
         mCursor.moveToPosition(position);
@@ -64,8 +75,9 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
         holder.bottom_Header_tv.setText(COLUMN_TITLE);
 
         holder.imageView.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                Intent intent = new Intent(mContext,DetailsActivity.class);
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, DetailsActivity.class);
                 intent.putExtra("title", COLUMN_TITLE);
                 intent.putExtra("poster_path", COLUMN_POSTER_PATH);
                 intent.putExtra("vote_average", COLUMN_USER_RATING);
@@ -79,13 +91,16 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
         });
 
 
-
     }
 
     @Override
     public int getItemCount() {
         return mCursor.getCount();
     }
+
+    /**
+     * @param newCursor
+     */
     public void swapCursor(Cursor newCursor) {
         if (mCursor != null) mCursor.close();
         mCursor = newCursor;
@@ -99,6 +114,9 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavV
         final ImageView imageView;
         private TextView bottom_Header_tv;
 
+        /**
+         * @param itemView
+         */
         public FavViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.thumbnail);

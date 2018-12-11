@@ -19,22 +19,26 @@ public class Trailer implements Parcelable {
     private String trailer_name;
     private String trailer_thumbnail;
     private String trailer_type;
-    public Trailer()
-    {
-        trailer_thumbnail = trailer_name = trailer_type = null ;
+
+    public Trailer() {
+        trailer_thumbnail = trailer_name = trailer_type = null;
     }
-    public Trailer(String trailer_name, String trailer_thumbnail, String trailer_type){
+
+    public Trailer(String trailer_name, String trailer_thumbnail, String trailer_type) {
         this.trailer_name = trailer_name;
         this.trailer_thumbnail = trailer_thumbnail;
         this.trailer_type = trailer_type;
     }
-    public String getTrailer_name(){
+
+    public String getTrailer_name() {
         return trailer_name;
     }
-    public String getTrailer_thumbnail(){
+
+    public String getTrailer_thumbnail() {
         return trailer_thumbnail;
     }
-    public String getTrailer_type(){
+
+    public String getTrailer_type() {
         return trailer_type;
     }
 

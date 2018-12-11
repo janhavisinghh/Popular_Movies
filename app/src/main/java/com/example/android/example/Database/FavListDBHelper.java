@@ -10,11 +10,16 @@ public class FavListDBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 2;
 
-
+    /**
+     * @param context
+     */
     public FavListDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * @param sqLiteDatabase
+     */
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
@@ -29,6 +34,11 @@ public class FavListDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_WAITLIST_TABLE);
     }
 
+    /**
+     * @param sqLiteDatabase
+     * @param i
+     * @param i1
+     */
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 

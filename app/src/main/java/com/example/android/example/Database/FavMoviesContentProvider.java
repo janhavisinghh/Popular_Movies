@@ -16,13 +16,10 @@ import static com.example.android.example.Database.MoviesContract.MoviesEntry.TA
 import static com.example.android.example.Database.MoviesContract.MoviesEntry.buildTodoUriWithId;
 
 public class FavMoviesContentProvider extends ContentProvider {
-    private FavListDBHelper favListDBHelper;
-
-
     public static final int FAV_MOVS = 100;
     public static final int FAV_MOVS_WITH_ID = 101;
-
     private static final UriMatcher sUriMatcher = buildUriMatcher();
+    private FavListDBHelper favListDBHelper;
 
     public static UriMatcher buildUriMatcher() {
 
@@ -44,9 +41,14 @@ public class FavMoviesContentProvider extends ContentProvider {
         return true;
     }
 
+    /**
+     * @param uri
+     * @param values
+     * @return
+     */
     @Nullable
     @Override
-    public Uri insert(@NonNull Uri uri,@Nullable ContentValues values) {
+    public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
         final SQLiteDatabase db = favListDBHelper.getWritableDatabase();
 
         int match = sUriMatcher.match(uri);
@@ -54,19 +56,28 @@ public class FavMoviesContentProvider extends ContentProvider {
         switch (match) {
             case FAV_MOVS:
                 long id = db.insert(TABLE_NAME, null, values);
-                if ( id != -1 ) {try{
-                    getContext().getContentResolver().notifyChange(uri, null);}
-                    catch (NullPointerException e){
-                    e.printStackTrace();
+                if (id != -1) {
+                    try {
+                        getContext().getContentResolver().notifyChange(uri, null);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
                     }
                 }
                 return buildTodoUriWithId(id);
 
             default:
-               return null;
+                return null;
         }
     }
 
+    /**
+     * @param uri
+     * @param projection
+     * @param selection
+     * @param selectionArgs
+     * @param sortOrder
+     * @return
+     */
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
@@ -93,7 +104,7 @@ public class FavMoviesContentProvider extends ContentProvider {
 
 
             case FAV_MOVS:
-                retCursor =  db.query(TABLE_NAME,
+                retCursor = db.query(TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -104,15 +115,21 @@ public class FavMoviesContentProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        try{
-        retCursor.setNotificationUri(getContext().getContentResolver(), uri);}
-        catch (NullPointerException e){
+        try {
+            retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
 
         return retCursor;
     }
 
+    /**
+     * @param uri
+     * @param selection
+     * @param selectionArgs
+     * @return
+     */
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
 
@@ -122,7 +139,7 @@ public class FavMoviesContentProvider extends ContentProvider {
         int tasksDeleted;
         switch (match) {
             case FAV_MOVS:
-                tasksDeleted = db.delete(TABLE_NAME, selection,selectionArgs);
+                tasksDeleted = db.delete(TABLE_NAME, selection, selectionArgs);
                 break;
             case FAV_MOVS_WITH_ID:
                 String movie_id = uri.getPathSegments().get(1);
@@ -136,9 +153,9 @@ public class FavMoviesContentProvider extends ContentProvider {
         }
 
         if (tasksDeleted != 0) {
-            try{
-            getContext().getContentResolver().notifyChange(uri, null);}
-            catch (NullPointerException e){
+            try {
+                getContext().getContentResolver().notifyChange(uri, null);
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
@@ -146,7 +163,13 @@ public class FavMoviesContentProvider extends ContentProvider {
         return tasksDeleted;
     }
 
-
+    /**
+     * @param uri
+     * @param values
+     * @param selection
+     * @param selectionArgs
+     * @return
+     */
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
@@ -154,7 +177,10 @@ public class FavMoviesContentProvider extends ContentProvider {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-
+    /**
+     * @param uri
+     * @return
+     */
     @Override
     public String getType(@NonNull Uri uri) {
 

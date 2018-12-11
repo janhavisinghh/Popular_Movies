@@ -17,28 +17,34 @@ import java.util.List;
 import static com.example.android.example.Adapters.TrailerAdapter.YT_BASE_PATH;
 
 public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    private String youtube_thumbail = "https://img.youtube.com/vi/";
-
+    public ImageView shareIcon;
     ImageView trailerImageView;
     TextView videoTitleTextView;
     TextView videoTypeTextView;
-    public ImageView shareIcon;
     List<Trailer> trailer;
     Context context;
+    private String youtube_thumbail = "https://img.youtube.com/vi/";
 
-    public TrailerViewHolder(View itemView, final Context context,final List<Trailer> trailer) {
+    /**
+     * @param itemView
+     * @param context
+     * @param trailer
+     */
+    public TrailerViewHolder(View itemView, final Context context, final List<Trailer> trailer) {
         super(itemView);
         trailerImageView = (ImageView) itemView.findViewById(R.id.iv_detail_trailer);
         videoTitleTextView = itemView.findViewById(R.id.tv_video_title);
         videoTypeTextView = itemView.findViewById(R.id.tv_video_type);
         shareIcon = itemView.findViewById(R.id.share_icon);
-        this.trailer=trailer;
+        this.trailer = trailer;
 
         this.context = context;
         itemView.setOnClickListener(this);
     }
 
-
+    /**
+     * @param listIndex
+     */
     public void bind(int listIndex) {
         String trailerThumbnailUrl = youtube_thumbail + trailer.get(listIndex).getTrailer_thumbnail() + "/maxresdefault.jpg";
         Picasso.get().load(trailerThumbnailUrl).placeholder(R.drawable.black_default).error(R.drawable.black_default).centerCrop().fit().into(trailerImageView);
@@ -46,6 +52,9 @@ public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.O
         videoTypeTextView.setText(trailer.get(listIndex).getTrailer_type());
     }
 
+    /**
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         int position = getAdapterPosition();

@@ -1,41 +1,39 @@
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-            <ImageView
-                android:id="@+id/thumbnail"
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:contentDescription="@string/PosterDetail"
-                android:scaleType="fitCenter" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="@color/colorPrimaryDark"
-                android:alpha="0.8"
-                android:contentDescription="@string/MovieName"
-                android:layout_gravity="bottom"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:id="@+id/bottom_header_tv"
-                android:layout_marginLeft="5dp"
-                android:textSize="10sp"
-                android:text="Hello my name is Janhavi Singh"
-                android:textColor="#ffffff"
-                android:maxLines="2"
+        <ImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/PosterDetail"
+            android:scaleType="fitCenter" />
 
-                android:fitsSystemWindows="true"
-                android:layout_gravity="bottom"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom"
+            android:alpha="0.8"
+            android:background="@color/colorPrimaryDark"
+            android:contentDescription="@string/MovieName" />
+
+        <TextView
+            android:id="@+id/bottom_header_tv"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="5dp"
+            android:fitsSystemWindows="true"
+            android:maxLines="2"
+            android:text="Hello my name is Janhavi Singh"
+
+            android:textColor="#ffffff"
+            android:textSize="10sp" />
 
 
-</FrameLayout>
+    </FrameLayout>
 </layout>

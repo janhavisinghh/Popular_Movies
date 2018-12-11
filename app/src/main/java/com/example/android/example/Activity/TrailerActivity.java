@@ -3,8 +3,8 @@ package com.example.android.example.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
@@ -19,14 +19,16 @@ import java.util.ArrayList;
 
 import static com.example.android.example.utilities.NetworkUtilities.Youtube_BaseURL;
 
-public class TrailerActivity extends AppCompatActivity implements TrailerAdapter.TrailerClickListener{
+public class TrailerActivity extends AppCompatActivity implements TrailerAdapter.TrailerClickListener {
 
     private RecyclerView trailer_rv;
     private ArrayList<Trailer> trailers;
     private TrailerAdapter trailerAdapter;
     private String movie_id;
 
-
+    /**
+     * @param movieKey
+     */
     @Override
     public void onClick(String movieKey) {
         Uri youtubeUri = Uri.parse(Youtube_BaseURL + movieKey);
@@ -35,6 +37,10 @@ public class TrailerActivity extends AppCompatActivity implements TrailerAdapter
             startActivity(startYoutube);
         }
     }
+
+    /**
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +60,7 @@ public class TrailerActivity extends AppCompatActivity implements TrailerAdapter
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         trailer_rv.setLayoutManager(layoutManager);
         trailer_rv.setHasFixedSize(true);
-        trailerAdapter = new TrailerAdapter(this,this);
+        trailerAdapter = new TrailerAdapter(this, this);
         trailer_rv.setAdapter(trailerAdapter);
 
         Intent myIntent = getIntent();
@@ -68,7 +74,6 @@ public class TrailerActivity extends AppCompatActivity implements TrailerAdapter
     }
 
 
-
     private class trailerQueryTask extends AsyncTask<URL, Void, ArrayList<Trailer>> {
 
         @Override
@@ -76,6 +81,10 @@ public class TrailerActivity extends AppCompatActivity implements TrailerAdapter
             super.onPreExecute();
         }
 
+        /**
+         * @param params
+         * @return
+         */
         @Override
         protected ArrayList<Trailer> doInBackground(URL... params) {
             if (params.length == 0) {
@@ -93,6 +102,9 @@ public class TrailerActivity extends AppCompatActivity implements TrailerAdapter
             return null;
         }
 
+        /**
+         * @param trailerQueryResult
+         */
         @Override
         protected void onPostExecute(ArrayList<Trailer> trailerQueryResult) {
             super.onPostExecute(trailerQueryResult);
